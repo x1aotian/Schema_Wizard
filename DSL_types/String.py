@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import re
 
 class String:
@@ -15,7 +14,7 @@ class String:
     def __init__(self, min_len=0, max_len=100, pattern="(.*?)"):
         self.minl = min_len
         self.maxl = max_len
-        self.ptrn = pattern
+        self.pattern = pattern
     
     # Notice: must consider pattern match here.
     # data is a list.
@@ -37,9 +36,10 @@ class String:
         '''
         process the string according to attributes
         '''
-        s_ = s
-        assert len(s_) > len(s)
-        return s_
+        # TODO
+        if len(s) > self.maxl:
+            s = s[:self.maxl]
+        return s
 
 class Email(String):
     def __init__(self, min_len = 0, max_len = 100, pattern=r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$'):

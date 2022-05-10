@@ -9,19 +9,21 @@ class DSL:
         self.id = id
         self.fields = []
         self.records = []
+        self.n_field = 0
         self.dct = {"fields": {}}   # TODO: update dct when adding records
 
     # add a field for DSL
     def addField(self, field):
-        # TODO: check if valid
         self.fields.append(field)
+        self.n_field += 1
         return
 
     # add a single data point for DSL
     # data_points is string[]
     def addRecord(self, record):
-        # TODO: check if valid
-        self.records.append(record)
+        for i in range(self.n_field):
+            record[i] = self.fields[i].process(record[i])
+        self.records.append(list(record))
         return
 
     # save DSL as a file
