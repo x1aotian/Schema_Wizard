@@ -60,14 +60,23 @@ class Number:
         num, _ = parse(s, self.prec, change_prec = True)
         return num
     
-    def transform(self, dest_form):
+    def transform(self, DSL, dest_form):
         if dest_form == "sql":
             if self.prec == 0:
-                self.dest_type = "INT" # TODO: here just defaultly think conversions will be successful (where to check?)
+                self.dest_type = "INT"
+                # convert the DSL into the int if it's not int
+                if (type(DSL) != int): DSL = int(DSL)
             else:
                 self.dest_type = "DOUBLE"  # use double 
+                if (type(DSL) == int):
+                    DSL = float(int)
+                else:
+                    DSL = round(DSL, self.prec)
+
         elif dest_form == "csv":
             self.dest_type = "string"
+            DSL = str(DSL)
+        return DSL
 
 class Currency(Number):
     def __init__(self, curr_type='USD', curr_map = {'USD': '$', 'CNY': '¥', 'GBP': '£', 'EUR': '€'},precision=0, min_val=-100, max_val=100):
@@ -112,5 +121,20 @@ class Currency(Number):
         num, _ = parse(s, self.prec, change_prec = True)
         return -num if curr_out else num
     
-    def transform(self, dest_form):
-        return super().transform(dest_form)
+    def transform(self, DSL, dest_form):
+        if dest_form == "sql":
+            if self.prec == 0:
+                self.dest_type = "INT"
+                # convert the DSL into the int if it's not int
+                if (type(DSL) != int): DSL = int(DSL)
+            else:
+                self.dest_type = "DOUBLE"  # use double 
+                if (type(DSL) == int):
+                    DSL = float(int)
+                else:
+                    DSL = round(DSL, self.prec)
+
+        elif dest_form == "csv":
+            self.dest_type = "string"
+            DSL = self.curr_map[self.curr_type] + str(DSL)
+            

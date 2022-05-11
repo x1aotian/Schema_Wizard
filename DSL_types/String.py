@@ -42,13 +42,17 @@ class String:
             s = s[:self.maxl]
         return s
 
-    def transform(self, dest_form):
+    def transform(self, DSL, dest_form):
         if dest_form == "sql":
             # use varchar
             self.dest_type = "VARCHAR"
         elif dest_form == "csv":
             self.dest_type = "string"
-            
+        # truncate the string
+        # TODO: Do we need truncate the string if converted into sql?
+        if (DSL.length > self.maxl):
+            DSL = DSL[0:DSL.length]
+        return DSL     
 
 class Email(String):
     def __init__(self, min_len = 0, max_len = 100, pattern=r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$'):
@@ -58,8 +62,14 @@ class Email(String):
         self.dest_type = ""
 
     # completely reuse the super method (so not explicitly writing is ok)
-    def transform(self, dest_form):
-        return super().transform(dest_form)
+    def transform(self, DSL, dest_form):
+        if dest_form == "sql":
+            # use varchar
+            self.dest_type = "VARCHAR"
+        elif dest_form == "csv":
+            self.dest_type = "string"
+        # no truncate here
+        return DSL
     
         
 
@@ -109,8 +119,15 @@ class Phone_Number(String):
         
         return s_
     
-    def transform(self, dest_form):
-        return super().transform(dest_form)
+    def transform(self, DSL, dest_form):
+        if dest_form == "sql":
+            # use varchar
+            self.dest_type = "VARCHAR"
+        elif dest_form == "csv":
+            self.dest_type = "string"
+        # need to re-form the phone number
+        DSL = DSL[:3] + "-" + DSL[3:6] + "-" + DSL[6:]
+        return DSL
 
 class URL(String):
     def __init__(self, min_len = 0, max_len = 100, pattern="((?<=[^a-zA-Z0-9])(?:https?\:\/\/|[a-zA-Z0-9]{1,}\.{1}|\b)(?:\w{1,}\.{1}){1,5}(?:com|org|edu|gov|uk|net|ca|de|jp|fr|au|us|ru|ch|it|nl|se|no|es|mil|iq|io|ac|ly|sm){1}(?:\/[a-zA-Z0-9]{1,})*)"):
@@ -119,5 +136,11 @@ class URL(String):
         self.pattern = pattern
         self.dest_type = ""
     
-    def transform(self, dest_form):
-        return super().transform(dest_form)
+    def transform(self, DSL, dest_form):
+        if dest_form == "sql":
+            # use varchar
+            self.dest_type = "VARCHAR"
+        elif dest_form == "csv":
+            self.dest_type = "string"
+        # no truncate here
+        return DSL

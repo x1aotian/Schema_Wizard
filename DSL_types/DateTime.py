@@ -8,7 +8,7 @@ class Date:
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
-        self.data_type = ""
+        self.dest_type = ""
     
     def regress(self, data):
         '''
@@ -41,15 +41,26 @@ class Date:
             # check the max_year, min_year
             if (date_list[0] > self.max_year): date_list[0] = self.max_year
             if (date_list[0] < self.min_year): date_list[0] = self.min_year
-            return date_list
+            # return the first three term back, a "'YYYY-MM-DD' string"
+            date_string = str(date_list[0]) + "-"
+            if (date_list[1] < 10):
+                date_string += "0"
+            date_string += str(date_list[1])+ "-" 
+            if (date_list[2] < 10):
+                date_string += "0"
+            date_string += str(date_list[2])
+            
+            return date_string
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
-    def transform(self, dest_form):
+    def transform(self, DSL, dest_form):
         if dest_form == "sql":
-            self.data_type = "DATE"  # TODO: check whether data conform YYYY-MM-DD, ow map to varchar
+            self.dest_type = "DATE"
+            DSL = datetime.datetime.strptime(DSL, '%Y-%m-%d')
         elif dest_form == "csv":
-            self.data_type = "string"
+            self.dest_type = "string"
+        return DSL
 
 class Time:
     '''
@@ -58,12 +69,8 @@ class Time:
         int formats: 'HH:MM:SS XM' or 'HH:MM:SS'
     '''
     def __init__(self, format_list = ['%H:%M:%S AM', '%H:%M:%S PM', '%H:%M:%S']):
-        now = datetime.datetime.now()
-        self.year = now.year
-        self.month = now.month
-        self.day = now.day
         self.fmt_list = format_list
-        self.data_type = ""
+        self.dest_type = ""
     
     def regress(self, data):
         for di in data:
@@ -90,19 +97,31 @@ class Time:
         try:
             date = datetime.datetime.strptime(s, '%H:%M:%S')
             date_list = list(date.timetuple())
-            date_list[0] = self.year
-            date_list[1] = self.month
-            date_list[2] = self.day
             if (need_add_12): date_list[3] += 12
+
+            # convert to string and return
+            date_string = ""
+            if (date_list[3] < 10):
+                date_string += "0"
+            date_string += str(date_list[3]) + ":"
+            if (date_list[4] < 10):
+                date_string += "0"
+            date_string += str(date_list[4])+ ":" 
+            if (date_list[5] < 10):
+                date_string += "0"
+            date_string += str(date_list[5])
             return date_list
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
     
     def transform(self, dest_form):
         if dest_form == "sql":
-            self.data_type = "VARCHAR"
+            # https://docs.microsoft.com/en-us/sql/t-sql/data-types/time-transact-sql?view=sql-server-ver15
+            self.dest_type = "TIME"
+            DSL = datetime.datetime.strptime(DSL, '%Y-%m-%d')
         elif dest_form == "csv":
-            self.data_type = "string"
+            self.dest_type = "string"
+        return DSL
 
 
 class DateTime(Date):
@@ -111,10 +130,48 @@ class DateTime(Date):
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
-        self.data_type = ""
+        self.dest_type = ""
 
-    def transform(self, dest_form):
+    def process(self, s):
+        date = None
+        for fmt in  self.fmt_list:
+            try:
+                date = datetime.datetime.strptime(s, fmt)
+                self.fmt = fmt
+            except:
+                pass
+        try:
+            date_list = list(date.timetuple())
+            # check the max_year, min_year
+            if (date_list[0] > self.max_year): date_list[0] = self.max_year
+            if (date_list[0] < self.min_year): date_list[0] = self.min_year
+            # return the first six term back, a "'YYYY-MM-DD HH:MM:SS' string"
+            date_string = str(date_list[0]) + "-"
+            if (date_list[1] < 10):
+                date_string += "0"
+            date_string += str(date_list[1]) + "-" 
+            if (date_list[2] < 10):
+                date_string += "0"
+            date_string += str(date_list[2]) + " "
+
+            if (date_list[3] < 10):
+                date_string += "0"
+            date_string += str(date_list[3]) + ":"
+            if (date_list[4] < 10):
+                date_string += "0"
+            date_string += str(date_list[4])+ ":" 
+            if (date_list[5] < 10):
+                date_string += "0"
+            date_string += str(date_list[5])
+            
+            return date_string
+        except:
+            print("Error!: incorrect formats, Please check the format of the input you need to process")
+
+    def transform(self, DSL, dest_form):
         if dest_form == "sql":
-            self.data_type = "DATETIME"  # TODO: use DATETIME, not TIMESTAMP (either is proper)
+            self.dest_type = "DATETIME"
+            DSL = datetime.datetime.strftime(DSL, '%Y-%m-%d %H:%M:%S')
         elif dest_form == "csv":
-            self.data_type = "string"
+            self.dest_type = "string"
+        return DSL
