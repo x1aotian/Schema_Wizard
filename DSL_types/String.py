@@ -17,6 +17,7 @@ class String:
         self.pattern = pattern
         self.dest_form = None
         self.dest_type = ""
+        self.mod_attrs = ["minl", "maxl"]
     
     # Notice: must consider pattern match here.
     # data is a list.
@@ -64,6 +65,7 @@ class Email(String):
         self.maxl = max_len
         self.pattern = pattern
         self.dest_type = ""
+        self.mod_attrs = ["minl", "maxl"]
 
     def getDestType(self, dest_form):
         return super().getDestType(dest_form)
@@ -84,6 +86,7 @@ class Phone_Number(String):
         self.maxl = max_len
         self.pattern = pattern
         self.dest_type = ""
+        self.mod_attrs = ["minl", "maxl"]
     
     def regress(self, data):
         for di in data:
@@ -134,6 +137,7 @@ class URL(String):
         self.maxl = max_len
         self.pattern = pattern
         self.dest_type = ""
+        self.mod_attrs = ["minl", "maxl"]
     
     def getDestType(self, dest_form):
         return super().getDestType(dest_form)

@@ -10,6 +10,7 @@ class Date:
         self.min_year = now.year
         self.dest_form = None
         self.dest_type = ""
+        self.mod_attrs = ["max_year", "min_year"]
     
     def regress(self, data):
         '''
@@ -81,6 +82,7 @@ class Time:
         self.fmt_list = format_list
         self.dest_type = ""
         self.dest_form = None
+        self.mod_attrs = ["max_year", "min_year"]
     
     def regress(self, data):
         for di in data:
@@ -150,6 +152,7 @@ class DateTime(Date):
         self.min_year = now.year
         self.dest_form = None
         self.dest_type = ""
+        self.mod_attrs = ["max_year", "min_year"]
 
     def process(self, s):
         date = None

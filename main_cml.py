@@ -23,7 +23,7 @@ if src_format == "csv":
     csv_file = str(input())
     src_data = src_read.read_csv(csv_file)
 elif src_format == "sql":
-    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test.db, Students\".")
+    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test.db, People\".")
     sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
     src_data, src_type = src_read.read_sql(sql_file, sql_table)
 
@@ -73,8 +73,8 @@ for idx, type_option in enumerate(type_options_proto):
     type_option_chosen = type_option[cho]
 
     # modify attributes
-    attr_keys = list(type_option_chosen.__dict__.keys())
-    attr_values = type_option_chosen.__dict__.values()
+    attr_keys = type_option_chosen.__dict__['mod_attrs']
+    attr_values = [type_option_chosen.__dict__[i] for i in attr_keys]
     attr_n = len(attr_keys)
     print("\n>> Provided atrributes: %s. Recommended values: %s." % (str(attr_keys), str(attr_values)))
     print(">> Input your list of values if you want to do modification. Press Enter to use recommened values.")
@@ -86,11 +86,9 @@ for idx, type_option in enumerate(type_options_proto):
 
     DSL_0.addField(type_option[cho])
 
-
-## Step 4.2. DSL add records (and process)
+## Step 4.2. DSL add records (and process) 
 for idx, row in src_data.iterrows():
     DSL_0.addRecord(row)
-
 
 ## Step 5. Output in dest format
 
@@ -107,12 +105,12 @@ for field in DSL_0.fields:
     field.getDestType(dest_format)
 
 if dest_format == "csv":
-    print("\n> Please input dest file's path. ex: \"samples/csv_test_dst.csv\".")
+    print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
     csv_file = str(input())
     dest_write.write_csv(csv_file, DSL_0)
 
 elif dest_format == "sql":
-    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, People\".")
+    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, Students\".")
     sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
     dest_write.write_sql(sql_file, sql_table, DSL_0)
 

@@ -25,7 +25,7 @@ def write_sql(dest_file, table_name, DSL_):
     cursor.execute(create_table_query)
 
     for record in DSL_.records:
-        insert_query = "INSERT INTO %s VALUES %s" % (table_name, tuple(record))
+        insert_query = "INSERT INTO %s VALUES %s;" % (table_name, tuple(record))
         cursor.execute(insert_query)
 
     conn.commit()

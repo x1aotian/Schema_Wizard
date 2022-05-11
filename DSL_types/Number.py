@@ -21,7 +21,7 @@ def parse(di, cur_prec, change_prec=False):
             if (cur_prec == 0): 
                 new_di = int(partition[0])
             else:
-                new_di = float(di)
+                new_di = str(round(float(di), cur_prec))
         else: 
             cur_prec = len(partition[2])
             new_di = float(di)
@@ -38,6 +38,7 @@ class Number:
         self.maxv = max_val
         self.dest_form = None
         self.dest_type = ""
+        self.mod_attrs = ["prec", "minv", "maxv"]
 
     # Do regression to fit given data
     # input: data points [] to regress
@@ -95,6 +96,7 @@ class Currency(Number):
         self.maxv = max_val
         self.dest_form = None
         self.dest_type = ""
+        self.mod_attrs = ["curr_type", "prec", "minv", "maxv"]
 
     def regress(self, data):
         cur_prec = 0
