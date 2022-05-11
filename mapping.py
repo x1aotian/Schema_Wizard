@@ -11,7 +11,11 @@ map_src = \
             "FLOAT": [Number, Currency],
             "DOUBLE": [Number, Currency],  # no need to turn into String; if sql want phone number, they should use char/varchar rather than float/double/int/integer, the same to URL
             "VARCHAR": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],   # varchar can contain letters, numbers and special characters
-            "CHAR": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL,  String]}, 
+            "CHAR": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL,  String], 
+            "DATE": [Date],
+            "DATETIME":[DateTime],
+            "TIMESTAMP":[DateTime]},
+            # TODO: we don't have YEAR type in dsl model
     # airtable docu: https://support.airtable.com/hc/en-us/articles/202624179-The-primary-field
     # airtable detailed def on type: https://support.airtable.com/hc/en-us/categories/360003084953-Fields
     "airtable": {"Single line text": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],

@@ -15,6 +15,7 @@ class String:
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
+        self.dest_type = ""
     
     # Notice: must consider pattern match here.
     # data is a list.
@@ -41,11 +42,25 @@ class String:
             s = s[:self.maxl]
         return s
 
+    def transform(self, dest_form):
+        if dest_form == "sql":
+            # use varchar
+            self.dest_type = "VARCHAR"
+        elif dest_form == "csv":
+            self.dest_type = "string"
+            
+
 class Email(String):
     def __init__(self, min_len = 0, max_len = 100, pattern=r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$'):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
+        self.dest_type = ""
+
+    # completely reuse the super method (so not explicitly writing is ok)
+    def transform(self, dest_form):
+        return super().transform(dest_form)
+    
         
 
 class Phone_Number(String):
@@ -57,6 +72,7 @@ class Phone_Number(String):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
+        self.dest_type = ""
     
     def regress(self, data):
         for di in data:
@@ -92,9 +108,16 @@ class Phone_Number(String):
             s_ += digits
         
         return s_
+    
+    def transform(self, dest_form):
+        return super().transform(dest_form)
 
 class URL(String):
     def __init__(self, min_len = 0, max_len = 100, pattern="((?<=[^a-zA-Z0-9])(?:https?\:\/\/|[a-zA-Z0-9]{1,}\.{1}|\b)(?:\w{1,}\.{1}){1,5}(?:com|org|edu|gov|uk|net|ca|de|jp|fr|au|us|ru|ch|it|nl|se|no|es|mil|iq|io|ac|ly|sm){1}(?:\/[a-zA-Z0-9]{1,})*)"):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
+        self.dest_type = ""
+    
+    def transform(self, dest_form):
+        return super().transform(dest_form)
