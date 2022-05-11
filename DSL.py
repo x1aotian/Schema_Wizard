@@ -7,6 +7,7 @@ class DSL:
     # init
     def __init__(self, id):
         self.id = id
+        self.names = []
         self.fields = []
         self.records = []
         self.n_field = 0
