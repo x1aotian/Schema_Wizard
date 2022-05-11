@@ -8,6 +8,7 @@ class Date:
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
+        self.data_type = ""
     
     def regress(self, data):
         '''
@@ -44,6 +45,12 @@ class Date:
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
+    def transform(self, dest_form):
+        if dest_form == "sql":
+            self.data_type = "DATE"  # TODO: check whether data conform YYYY-MM-DD, ow map to varchar
+        elif dest_form == "csv":
+            self.data_type = "string"
+
 class Time:
     '''
     Initialize the Time class
@@ -56,6 +63,7 @@ class Time:
         self.month = now.month
         self.day = now.day
         self.fmt_list = format_list
+        self.data_type = ""
     
     def regress(self, data):
         for di in data:
@@ -89,6 +97,12 @@ class Time:
             return date_list
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
+    
+    def transform(self, dest_form):
+        if dest_form == "sql":
+            self.data_type = "VARCHAR"
+        elif dest_form == "csv":
+            self.data_type = "string"
 
 
 class DateTime(Date):
@@ -97,3 +111,10 @@ class DateTime(Date):
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
+        self.data_type = ""
+
+    def transform(self, dest_form):
+        if dest_form == "sql":
+            self.data_type = "DATETIME"  # TODO: use DATETIME, not TIMESTAMP (either is proper)
+        elif dest_form == "csv":
+            self.data_type = "string"

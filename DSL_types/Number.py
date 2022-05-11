@@ -36,6 +36,7 @@ class Number:
         self.prec = precision
         self.minv = min_val
         self.maxv = max_val
+        self.dest_type = ""
 
     # Do regression to fit given data
     # input: data points [] to regress
@@ -58,6 +59,15 @@ class Number:
     def process(self, s):
         num, _ = parse(s, self.prec, change_prec = True)
         return num
+    
+    def transform(self, dest_form):
+        if dest_form == "sql":
+            if self.prec == 0:
+                self.dest_type = "INT" # TODO: here just defaultly think conversions will be successful (where to check?)
+            else:
+                self.dest_type = "DOUBLE"  # use double 
+        elif dest_form == "csv":
+            self.dest_type = "string"
 
 class Currency(Number):
     def __init__(self, curr_type='USD', curr_map = {'USD': '$', 'CNY': '¥', 'GBP': '£', 'EUR': '€'},precision=0, min_val=-100, max_val=100):
@@ -66,6 +76,8 @@ class Currency(Number):
         self.prec = precision
         self.minv = min_val
         self.maxv = max_val
+        self.dest_type = ""
+
     def regress(self, data):
         cur_prec = 0
         for di in data:
@@ -99,3 +111,6 @@ class Currency(Number):
             s = s[1:]
         num, _ = parse(s, self.prec, change_prec = True)
         return -num if curr_out else num
+    
+    def transform(self, dest_form):
+        return super().transform(dest_form)
