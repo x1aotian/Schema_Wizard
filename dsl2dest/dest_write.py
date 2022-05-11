@@ -13,6 +13,10 @@ def write_csv(dest_file, DSL_):
 def write_sql(dest_file, table_name, DSL_):
     conn = sqlite3.connect(dest_file)
     cursor = conn.cursor()
+
+    drop_query = "DROP TABLE IF EXISTS %s" % table_name
+    cursor.execute(drop_query)
+
     create_table_query = "CREATE TABLE " + table_name + " ("
     for i in range(len(DSL_.names)):
         create_table_query += DSL_.names[i] + " " + str(DSL_.fields[i].dest_type) + ','
@@ -24,4 +28,6 @@ def write_sql(dest_file, table_name, DSL_):
         insert_query = "INSERT INTO %s VALUES %s" % (table_name, tuple(record))
         cursor.execute(insert_query)
 
+    conn.commit()
+    cursor.close()
     return

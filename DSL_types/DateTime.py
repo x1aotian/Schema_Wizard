@@ -8,6 +8,7 @@ class Date:
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
+        self.dest_form = None
         self.dest_type = ""
     
     def regress(self, data):
@@ -54,13 +55,21 @@ class Date:
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
-    def transform(self, DSL, dest_form):
+    def getDestType(self, dest_form):
+        self.dest_form
         if dest_form == "sql":
             self.dest_type = "DATE"
-            DSL = datetime.datetime.strptime(DSL, '%Y-%m-%d')
         elif dest_form == "csv":
             self.dest_type = "string"
-        return DSL
+        return
+
+    def transform(self, data):
+        if self.dest_form == "sql":
+            if self.dest_type == "DATE":
+                data_new = datetime.datetime.strptime(data, '%Y-%m-%d')
+        elif self.dest_form == "csv":
+            data_new = data
+        return data_new
 
 class Time:
     '''
@@ -71,6 +80,7 @@ class Time:
     def __init__(self, format_list = ['%H:%M:%S AM', '%H:%M:%S PM', '%H:%M:%S']):
         self.fmt_list = format_list
         self.dest_type = ""
+        self.dest_form = None
     
     def regress(self, data):
         for di in data:
@@ -114,14 +124,22 @@ class Time:
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
     
-    def transform(self, dest_form):
+    def getDestType(self, dest_form):
+        self.dest_form = dest_form
         if dest_form == "sql":
-            # https://docs.microsoft.com/en-us/sql/t-sql/data-types/time-transact-sql?view=sql-server-ver15
             self.dest_type = "TIME"
-            DSL = datetime.datetime.strptime(DSL, '%Y-%m-%d')
         elif dest_form == "csv":
             self.dest_type = "string"
-        return DSL
+        return
+
+    def transform(self, data):
+        if self.dest_form == "sql":
+            # https://docs.microsoft.com/en-us/sql/t-sql/data-types/time-transact-sql?view=sql-server-ver15
+            if self.dest_type == "TIME":
+                data_new = datetime.datetime.strptime(data, '%Y-%m-%d')
+        elif self.dest_form == "csv":
+                data_new = data
+        return data_new
 
 
 class DateTime(Date):
@@ -130,6 +148,7 @@ class DateTime(Date):
         now = datetime.datetime.now()
         self.max_year = now.year
         self.min_year = now.year
+        self.dest_form = None
         self.dest_type = ""
 
     def process(self, s):
@@ -168,10 +187,18 @@ class DateTime(Date):
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
-    def transform(self, DSL, dest_form):
+    def getDestType(self, dest_form):
+        self.dest_form = dest_form
         if dest_form == "sql":
             self.dest_type = "DATETIME"
-            DSL = datetime.datetime.strftime(DSL, '%Y-%m-%d %H:%M:%S')
         elif dest_form == "csv":
             self.dest_type = "string"
-        return DSL
+        return
+
+    def transform(self, data):
+        if self.dest_form == "sql":
+            if self.dest_type == "DATETIME":
+                data_new = datetime.datetime.strftime(data, '%Y-%m-%d %H:%M:%S')
+        elif self.dest_form == "csv":
+            data_new = data
+        return data_new

@@ -5,10 +5,10 @@ from DSL import DSL
 
 ## Step 1. read src file
 
-# src_format = "csv"
+src_format = "csv"
 csv_file = "samples/csv_test.csv"
 
-src_format = "sql"
+# src_format = "sql"
 sql_file = "samples/sql_test.db"
 sql_table = "People"
 
@@ -61,13 +61,16 @@ for idx, row in src_data.iterrows():
 # dst_format = "csv"
 csv_file = "samples/csv_test_dst.csv"
 
-dst_format = "sql"
+dest_format = "sql"
 sql_file = "samples/sql_test_dst.db"
 table_name = "Students"
 
-if dst_format == "csv":
+for field in DSL_0.fields:
+    field.getDestType(dest_format)
+
+if dest_format == "csv":
     dest_write.write_csv(csv_file, DSL_0)
-elif dst_format == "sql":
+elif dest_format == "sql":
     dest_write.write_sql(sql_file, table_name, DSL_0)
 
 print("end")

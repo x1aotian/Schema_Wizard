@@ -1,0 +1,119 @@
+from turtle import screensize
+from src2dsl import src_read
+from dsl2dest import dest_write
+from mapping import *
+from DSL import DSL
+
+## Step 1. read src file
+
+# src_format = "csv"
+# csv_file = "samples/csv_test.csv"
+# src_format = "sql"
+# sql_file = "samples/sql_test.db"
+# sql_table = "People"
+
+print("------------ Welcome to Schema Wizard CLI Demo ------------")
+
+print("\n> Please input source format. Current valid inputs: csv, sql.")
+src_format = str(input())
+
+
+if src_format == "csv":
+    print("\n> Please input source file's path. ex: \"samples/csv_test.csv\".")
+    csv_file = str(input())
+    src_data = src_read.read_csv(csv_file)
+elif src_format == "sql":
+    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test.db, Students\".")
+    sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
+    src_data, src_type = src_read.read_sql(sql_file, sql_table)
+
+
+## Step 2. regress
+
+type_options_proto = []
+
+if src_format == "csv":
+    for col in src_data.columns:
+        type_options_proto.append([])
+        for type in map_src["csv"]["string"]:
+            type_m = type()
+            if type_m.regress(src_data[col]):
+                type_options_proto[-1].append(type_m)
+
+elif src_format == "sql":
+    for i in range(len(src_type)):
+        type_options_proto.append([])
+        nm = src_type.loc[i, 'name']
+        ty = src_type.loc[i, 'type']
+        ty = ty.split('(')[0].upper()
+        for type in map_src["sql"][ty]:
+            type_m = type()
+            if type_m.regress(src_data[nm]):
+                type_options_proto[-1].append(type_m)
+
+
+## Step 3. Choose DSL types and attributes
+## Step 4.1. create DSL, add types
+# suppose always choose the first option
+DSL_0 = DSL(0)
+DSL_0.names = list(src_data.columns)
+type_options = []
+
+print("\n> Please desgin your types for each column.")
+for idx, type_option in enumerate(type_options_proto):
+    # choose type
+    print("\n> > input index of type you want to choose for column {%s}. Press Enter to use default values.:" % (DSL_0.names[idx]) )
+    for i, typee in enumerate(type_option):
+        print("    %d. %s" % (i, typee.__class__.__name__))
+    field_input = str(input())
+    if field_input:
+        cho = int(field_input)
+    else:
+        cho = 0
+    type_option_chosen = type_option[cho]
+
+    # modify attributes
+    attr_keys = list(type_option_chosen.__dict__.keys())
+    attr_values = type_option_chosen.__dict__.values()
+    attr_n = len(attr_keys)
+    print("\n>> Provided atrributes: %s. Recommended values: %s." % (str(attr_keys), str(attr_values)))
+    print(">> Input your list of values if you want to do modification. Press Enter to use recommened values.")
+    attr_input = str(input())
+    if attr_input:
+        attr_values_mod = eval(attr_input)
+        for i, v in enumerate(attr_keys):
+            type_option_chosen.__dict__[v] = attr_values_mod[i]
+
+    DSL_0.addField(type_option[cho])
+
+
+## Step 4.2. DSL add records (and process)
+for idx, row in src_data.iterrows():
+    DSL_0.addRecord(row)
+
+
+## Step 5. Output in dest format
+
+# dst_format = "csv"
+# csv_file = "samples/csv_test_dst.csv"
+# dst_format = "sql"
+# sql_file = "samples/sql_test_dst.db"
+# table_name = "Students"
+
+print("\n> Please input destination format. Current valid inputs: csv, sql.")
+dest_format = str(input())
+
+for field in DSL_0.fields:
+    field.getDestType(dest_format)
+
+if dest_format == "csv":
+    print("\n> Please input dest file's path. ex: \"samples/csv_test_dst.csv\".")
+    csv_file = str(input())
+    dest_write.write_csv(csv_file, DSL_0)
+
+elif dest_format == "sql":
+    print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, People\".")
+    sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
+    dest_write.write_sql(sql_file, sql_table, DSL_0)
+
+print("\n*** Convert schema from %s to %s successfully! ***" % (src_format, dest_format))

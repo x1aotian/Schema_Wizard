@@ -36,6 +36,7 @@ class Number:
         self.prec = precision
         self.minv = min_val
         self.maxv = max_val
+        self.dest_form = None
         self.dest_type = ""
 
     # Do regression to fit given data
@@ -60,23 +61,30 @@ class Number:
         num, _ = parse(s, self.prec, change_prec = True)
         return num
     
-    def transform(self, DSL, dest_form):
+    def getDestType(self, dest_form):
+        self.dest_form = dest_form
         if dest_form == "sql":
             if self.prec == 0:
                 self.dest_type = "INT"
-                # convert the DSL into the int if it's not int
-                if (type(DSL) != int): DSL = int(DSL)
             else:
-                self.dest_type = "DOUBLE"  # use double 
-                if (type(DSL) == int):
-                    DSL = float(int)
-                else:
-                    DSL = round(DSL, self.prec)
-
+                self.dest_type = "DOUBLE"
         elif dest_form == "csv":
             self.dest_type = "string"
-            DSL = str(DSL)
-        return DSL
+
+    def transform(self, data):
+        if self.dest_form == "sql":
+            if self.dest_type == "INT":
+                # convert the DSL into the int if it's not int
+                if (type(data) != int): DSL = int(data)
+            elif self.dest_type == "DOUBLE":  # use double 
+                if (type(data) == int):
+                    data_new = float(int)
+                else:
+                    data_new = round(data, self.prec)
+
+        elif self.dest_form == "csv":
+            data_new = str(data)
+        return data_new
 
 class Currency(Number):
     def __init__(self, curr_type='USD', curr_map = {'USD': '$', 'CNY': '¥', 'GBP': '£', 'EUR': '€'},precision=0, min_val=-100, max_val=100):
@@ -85,6 +93,7 @@ class Currency(Number):
         self.prec = precision
         self.minv = min_val
         self.maxv = max_val
+        self.dest_form = None
         self.dest_type = ""
 
     def regress(self, data):
@@ -121,20 +130,33 @@ class Currency(Number):
         num, _ = parse(s, self.prec, change_prec = True)
         return -num if curr_out else num
     
-    def transform(self, DSL, dest_form):
+    def getDestType(self, dest_form):
+        self.dest_form = dest_form
         if dest_form == "sql":
             if self.prec == 0:
                 self.dest_type = "INT"
-                # convert the DSL into the int if it's not int
-                if (type(DSL) != int): DSL = int(DSL)
             else:
                 self.dest_type = "DOUBLE"  # use double 
-                if (type(DSL) == int):
-                    DSL = float(int)
-                else:
-                    DSL = round(DSL, self.prec)
 
         elif dest_form == "csv":
             self.dest_type = "string"
-            DSL = self.curr_map[self.curr_type] + str(DSL)
+
+
+    def transform(self, data):
+        if self.dest_form == "sql":
+            if self.dest_type == "INT":
+                # convert the DSL into the int if it's not int
+                if (type(data) != int): data_new = int(data)
+            else:
+                self.dest_type = "DOUBLE"  # use double 
+                if (type(data) == int):
+                    data_new = float(int)
+                else:
+                    data_new = round(data, self.prec)
+
+        elif self.dest_form == "csv":
+            self.dest_type = "string"
+            data_new = self.curr_map[self.curr_type] + str(data)
+
+        return data_new
             

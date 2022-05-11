@@ -11,4 +11,3 @@ def read_sql(db_file, table_name=None):
     table = pd.read_sql_query(select_data_query, db_conn, dtype=str)
     types = pd.read_sql_query(select_type_query, db_conn)
     return table, types
-    # TODO: 1. all tables. 2. can provide tables option. 3. exception.
