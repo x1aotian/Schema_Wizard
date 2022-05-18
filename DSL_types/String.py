@@ -66,7 +66,8 @@ class Email(String):
         self.pattern = pattern
         self.dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
-
+    def process(self, s):
+        return s
     def getDestType(self, dest_form):
         return super().getDestType(dest_form)
 
@@ -120,7 +121,7 @@ class Phone_Number(String):
         s_ = ""
         for digits in digits_section:
             s_ += digits
-        
+        s_ = s_[:3] + "-" + s_[3:6] + "-" + s_[6:]
         return s_
     
     def getDestType(self, dest_form):
@@ -128,16 +129,31 @@ class Phone_Number(String):
 
     def transform(self, data):
         # need to re-form the phone number
-        data_new = data[:3] + "-" + data[3:6] + "-" + data[6:]
-        return data_new
+        return data
 
 class URL(String):
-    def __init__(self, min_len = 0, max_len = 100, pattern="((?<=[^a-zA-Z0-9])(?:https?\:\/\/|[a-zA-Z0-9]{1,}\.{1}|\b)(?:\w{1,}\.{1}){1,5}(?:com|org|edu|gov|uk|net|ca|de|jp|fr|au|us|ru|ch|it|nl|se|no|es|mil|iq|io|ac|ly|sm){1}(?:\/[a-zA-Z0-9]{1,})*)"):
+    def __init__(self, min_len = 0, max_len = 100, pattern=re.compile(r'^(?:http|ftp)s?://' # http:// or https://
+                                                                      r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+                                                                      r'localhost|' #localhost...
+                                                                      r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+                                                                      r'(?::\d+)?' # optional port
+                                                                      r'(?:/?|[/?]\S+)$', re.IGNORECASE)):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
         self.dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
+    def regress(self, data):
+        '''
+        see if data can regress to current type (class)
+        '''
+        for di in data:
+            re_match = re.match(self.pattern, di)
+            if not re_match:
+                return False
+        return True
+    def process(self, s):
+        return s
     
     def getDestType(self, dest_form):
         return super().getDestType(dest_form)

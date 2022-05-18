@@ -5,12 +5,12 @@ from DSL import DSL
 
 ## Step 1. read src file
 
-src_format = "csv"
+#src_format = "csv"
 csv_file = "samples/csv_test.csv"
 
-# src_format = "sql"
-sql_file = "samples/sql_test.db"
-sql_table = "People"
+src_format = "sql"
+sql_file = "samples/sql_test_dest.db"
+sql_table = "Students"
 
 if src_format == "csv":
     src_data = src_read.read_csv(csv_file)
@@ -61,7 +61,7 @@ for idx, row in src_data.iterrows():
 # dst_format = "csv"
 csv_file = "samples/csv_test_dst.csv"
 
-dest_format = "sql"
+dest_format = "csv"
 sql_file = "samples/sql_test_dst.db"
 table_name = "Students"
 

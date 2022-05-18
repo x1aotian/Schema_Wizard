@@ -59,7 +59,7 @@ DSL_0 = DSL(0)
 DSL_0.names = list(src_data.columns)
 type_options = []
 
-print("\n> Please desgin your types for each column.")
+print("\n> Please design your types for each column.")
 for idx, type_option in enumerate(type_options_proto):
     # choose type
     print("\n> > input index of type you want to choose for column {%s}. Press Enter to use default values.:" % (DSL_0.names[idx]) )
