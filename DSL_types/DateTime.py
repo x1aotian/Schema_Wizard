@@ -1,6 +1,5 @@
 import datetime
 
-import datetime
 class Date:
     # possible formats: 'YYYY-MM-DD', 'DD/MM/YYYY', 'DD.MM.YYYY', 'MM.DD.YYYY'
     def __init__(self, format_list=['%Y-%m-%d', '%d.%m.%Y', '%d/%m/%Y', '%m/%d/%Y']):
@@ -9,7 +8,7 @@ class Date:
         self.max_year = now.year
         self.min_year = now.year
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["max_year", "min_year"]
     
     def regress(self, data):
@@ -56,23 +55,23 @@ class Date:
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
-    def getDestType(self, dest_form):
-        self.dest_form
+    def transform(self, dest_form):
+        self.dest_form = dest_form
         if dest_form == "sql":
-            self.dest_type = "DATE"
+            self.__dest_type = "DATE"
+            # data = datetime.datetime.strptime(data, '%Y-%m-%d')
         elif dest_form == "csv":
-            self.dest_type = "string"
+            self.__dest_type = "string"
         return
+    
+    def getDestType(self):
+        return self.__dest_type
+    
+    def setDestType(self, type):
+        self.__dest_type = type
 
-    def transform(self, data):
-        if self.dest_form == "sql":
-            if self.dest_type == "DATE":
-                data_new = datetime.datetime.strptime(data, '%Y-%m-%d')
-        elif self.dest_form == "csv":
-            data_new = data
-        return data_new
 
-class Time:
+class Time(Date):
     '''
     Initialize the Time class
     Args:
@@ -80,9 +79,9 @@ class Time:
     '''
     def __init__(self, format_list = ['%H:%M:%S AM', '%H:%M:%S PM', '%H:%M:%S']):
         self.fmt_list = format_list
-        self.dest_type = ""
+        self.__dest_type = ""
         self.dest_form = None
-        self.mod_attrs = ["max_year", "min_year"]
+        self.mod_attrs = []
     
     def regress(self, data):
         for di in data:
@@ -122,27 +121,20 @@ class Time:
             if (date_list[5] < 10):
                 date_string += "0"
             date_string += str(date_list[5])
-            return date_list
+            return date_string
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
     
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
-            self.dest_type = "TIME"
+            # self.__dest_type = "TIME"
+            self.setDestType("TIME")
+            # data = datetime.datetime.strptime(data, '%Y-%m-%d')
         elif dest_form == "csv":
-            self.dest_type = "string"
+            # self.__dest_type = "string"
+            self.setDestType("string")
         return
-
-    def transform(self, data):
-        if self.dest_form == "sql":
-            # https://docs.microsoft.com/en-us/sql/t-sql/data-types/time-transact-sql?view=sql-server-ver15
-            if self.dest_type == "TIME":
-                data_new = datetime.datetime.strptime(data, '%Y-%m-%d')
-        elif self.dest_form == "csv":
-                data_new = data
-        return data_new
-
 
 class DateTime(Date):
     def __init__(self, format_list=["%Y-%m-%d %H:%M:%S"]):
@@ -151,8 +143,10 @@ class DateTime(Date):
         self.max_year = now.year
         self.min_year = now.year
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["max_year", "min_year"]
+    def regress(self, data):
+        return super().regress(data)
 
     def process(self, s):
         date = None
@@ -190,18 +184,12 @@ class DateTime(Date):
         except:
             print("Error!: incorrect formats, Please check the format of the input you need to process")
 
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
-            self.dest_type = "DATETIME"
+            # self.__dest_type = "DATETIME"
+            self.setDestType("DATETIME")
+            # data = datetime.datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
         elif dest_form == "csv":
-            self.dest_type = "string"
-        return
-
-    def transform(self, data):
-        if self.dest_form == "sql":
-            if self.dest_type == "DATETIME":
-                data_new = datetime.datetime.strftime(data, '%Y-%m-%d %H:%M:%S')
-        elif self.dest_form == "csv":
-            data_new = data
-        return data_new
+            # self.__dest_type = "string"
+            self.setDestType("string")
