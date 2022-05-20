@@ -37,7 +37,7 @@ class Number:
         self.minv = min_val
         self.maxv = max_val
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["prec", "minv", "maxv"]
 
     # Do regression to fit given data
@@ -47,12 +47,14 @@ class Number:
         # TODO
         cur_prec = 0
         for di in data:
+            print(di)
             new_di, cur_prec = parse(di, cur_prec)
             if (new_di is None and cur_prec is None): return False
             # update the precision, min_val, and max_val
             if (new_di < self.minv): self.minv = new_di
             if (new_di > self.maxv): self.maxv = new_di
             if (cur_prec > self.prec): self.prec = cur_prec
+            print("pass")
         return True
 
     # process string to desired format
@@ -74,22 +76,24 @@ class Number:
                 num = float(num)
         return num
     
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
             if self.prec == 0:
-                self.dest_type = "INT"
+                # self.__dest_type = "INT"
+                self.setDestType("INT")
             else:
-                self.dest_type = "DOUBLE"
+                # self.__dest_type = "DOUBLE"
+                self.setDestType("DOUBLE")
         elif dest_form == "csv":
-            self.dest_type = "string"
+            # self.__dest_type = "string"
+            self.setDestType("string")
 
-    def transform(self, data):
-        if self.dest_form == "sql":
-            data_new = data
-        elif self.dest_form == "csv":
-            data_new = str(data)
-        return data_new
+    def getDestType(self):
+        return self.__dest_type
+    
+    def setDestType(self, type):
+        self.__dest_type = type
 
 class Currency(Number):
     def __init__(self, curr_type='USD', curr_map = {'USD': '$', 'CNY': '¥', 'GBP': '£', 'EUR': '€'},precision=0, min_val=-100, max_val=100):
@@ -99,7 +103,7 @@ class Currency(Number):
         self.minv = min_val
         self.maxv = max_val
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["curr_type", "prec", "minv", "maxv"]
 
     def regress(self, data):
@@ -165,14 +169,12 @@ class Currency(Number):
         if (pre_sign * after_sign == -1): num_str = "-" + num_str
         return num_str
     
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
             # use varchar
-            self.dest_type = "VARCHAR"
+            # self.__dest_type = "VARCHAR"
+            self.setDestType("VARCHAR")
         elif dest_form == "csv":
-            self.dest_type = "string"
-
-    def transform(self, data):
-        return data
-            
+            # self.__dest_type = "string"
+            self.setDestType("string")

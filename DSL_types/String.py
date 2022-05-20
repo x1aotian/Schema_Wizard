@@ -16,7 +16,7 @@ class String:
         self.maxl = max_len
         self.pattern = pattern
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
     
     # Notice: must consider pattern match here.
@@ -44,37 +44,35 @@ class String:
             s = s[:self.maxl]
         return s
 
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
             # use varchar
-            self.dest_type = "VARCHAR"
+            # self.__dest_type = "VARCHAR"
+            self.setDestType("VARCHAR")
         elif dest_form == "csv":
-            self.dest_type = "string"
+            #self.__dest_type = "string"
+            self.setDestType("csv")
 
-    def transform(self, data):
-        # truncate the string
-        # TODO: Do we need truncate the string if converted into sql?
-        if (data.length > self.maxl):
-            data_new = data[0:self.maxl]
-        return data_new     
-
+    def getDestType(self):
+        return self.__dest_type
+    
+    def setDestType(self, type):
+        self.__dest_type = type
+    
 class Email(String):
     def __init__(self, min_len = 0, max_len = 100, pattern=r'^\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b$'):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
+    
     def process(self, s):
         return s
-    def getDestType(self, dest_form):
-        return super().getDestType(dest_form)
 
-    # completely reuse the super method (so not explicitly writing is ok)
-    def transform(self, data):
-        return data
-    
+    def transform(self, dest_form):
+        return super().transform(dest_form)
         
 
 class Phone_Number(String):
@@ -86,7 +84,7 @@ class Phone_Number(String):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
     
     def regress(self, data):
@@ -124,12 +122,8 @@ class Phone_Number(String):
         s_ = s_[:3] + "-" + s_[3:6] + "-" + s_[6:]
         return s_
     
-    def getDestType(self, dest_form):
-        return super().getDestType(dest_form)
-
-    def transform(self, data):
-        # need to re-form the phone number
-        return data
+    def transform(self, dest_form):
+        return super().transform(dest_form)
 
 class URL(String):
     def __init__(self, min_len = 0, max_len = 100, pattern=re.compile(r'^(?:http|ftp)s?://' # http:// or https://
@@ -141,7 +135,7 @@ class URL(String):
         self.minl = min_len
         self.maxl = max_len
         self.pattern = pattern
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["minl", "maxl"]
     def regress(self, data):
         '''
@@ -155,9 +149,5 @@ class URL(String):
     def process(self, s):
         return s
     
-    def getDestType(self, dest_form):
-        return super().getDestType(dest_form)
-
-    def transform(self, data):
-        # no truncate here
-        return data
+    def transform(self, dest_form):
+        return super().transform(dest_form)

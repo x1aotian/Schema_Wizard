@@ -56,13 +56,13 @@ elif src_format == "sql":
 ## Step 4.1. create DSL, add types
 # suppose always choose the first option
 DSL_0 = DSL(0)
-DSL_0.names = list(src_data.columns)
+DSL_0.setNames(list(src_data.columns))
 type_options = []
 
 print("\n> Please design your types for each column.")
 for idx, type_option in enumerate(type_options_proto):
     # choose type
-    print("\n> > input index of type you want to choose for column {%s}. Press Enter to use default values.:" % (DSL_0.names[idx]) )
+    print("\n>>>> input index of type you want to choose for column {%s}. Press Enter to use default values.:" % (DSL_0.getNames()[idx]) )
     for i, typee in enumerate(type_option):
         print("    %d. %s" % (i, typee.__class__.__name__))
     field_input = str(input())
@@ -76,13 +76,18 @@ for idx, type_option in enumerate(type_options_proto):
     attr_keys = type_option_chosen.__dict__['mod_attrs']
     attr_values = [type_option_chosen.__dict__[i] for i in attr_keys]
     attr_n = len(attr_keys)
-    print("\n>> Provided atrributes: %s. Recommended values: %s." % (str(attr_keys), str(attr_values)))
-    print(">> Input your list of values if you want to do modification. Press Enter to use recommened values.")
-    attr_input = str(input())
-    if attr_input:
-        attr_values_mod = eval(attr_input)
-        for i, v in enumerate(attr_keys):
-            type_option_chosen.__dict__[v] = attr_values_mod[i]
+    
+    # if no attribute need to be provided by users:
+    if (attr_n == 0):
+        print("\n>> There is no attribute of this field that needs to be assigned.")
+    else:
+        print("\n>> Provided atrributes: %s. Recommended values: %s." % (str(attr_keys), str(attr_values)))
+        print(">> Input your list of values if you want to do modification. Press Enter to use recommened values.")
+        attr_input = str(input())
+        if attr_input:
+            attr_values_mod = eval(attr_input)
+            for i, v in enumerate(attr_keys):
+                type_option_chosen.__dict__[v] = attr_values_mod[i]
 
     DSL_0.addField(type_option[cho])
 
@@ -101,8 +106,8 @@ for idx, row in src_data.iterrows():
 print("\n> Please input destination format. Current valid inputs: csv, sql.")
 dest_format = str(input())
 
-for field in DSL_0.fields:
-    field.getDestType(dest_format)
+for field in DSL_0.getFields():
+    field.transform(dest_format)
 
 if dest_format == "csv":
     print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
