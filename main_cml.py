@@ -14,7 +14,7 @@ from DSL import DSL
 
 print("------------ Welcome to Schema Wizard CLI Demo ------------")
 
-print("\n> Please input source format. Current valid inputs: csv, sql.")
+print("\n> Please input source format. Current valid inputs: csv, sql, ggs.")
 src_format = str(input())
 
 
@@ -26,13 +26,16 @@ elif src_format == "sql":
     print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test.db, People\".")
     sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
     src_data, src_type = src_read.read_sql(sql_file, sql_table)
-
+elif src_format == "ggs":
+    print("\n> Please input path of creds json file, sheets name and sheet name, seperated by comma. ex: \"samples/creds_wizard.json, schema_sample, Read\".")
+    creds_json_file, sheets_name, sheet_name = [i.strip() for i in str(input()).split(",")]
+    src_data = src_read.read_ggs(creds_json_file, sheets_name, sheet_name)
 
 ## Step 2. regress
 
 type_options_proto = []
 
-if src_format == "csv":
+if src_format in ["csv", "ggs"]:
     for col in src_data.columns:
         type_options_proto.append([])
         for type in map_src["csv"]["string"]:
@@ -118,5 +121,10 @@ elif dest_format == "sql":
     print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, Students\".")
     sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
     dest_write.write_sql(sql_file, sql_table, DSL_0)
+
+elif dest_format == "ggs":
+    print("\n> Please input path of creds json file, sheets name and sheet name, seperated by comma. ex: \"samples/creds_wizard.json, schema_sample, Write\".")
+    creds_json_file, sheets_name, sheet_name = [i.strip() for i in str(input()).split(",")]
+    dest_write.write_ggs(creds_json_file, sheets_name, sheet_name, DSL_0)
 
 print("\n*** Convert schema from %s to %s successfully! ***" % (src_format, dest_format))

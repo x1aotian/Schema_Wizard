@@ -1,6 +1,9 @@
 import sqlite3
 import pandas as pd
 
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
 def read_csv(src_file):
     return pd.read_csv(src_file, dtype=str)
 
@@ -11,3 +14,11 @@ def read_sql(db_file, table_name=None):
     table = pd.read_sql_query(select_data_query, db_conn, dtype=str)
     types = pd.read_sql_query(select_type_query, db_conn)
     return table, types
+
+def read_ggs(creds_json_file, sheets_name, sheet_name):
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name(creds_json_file, scope)
+    client = gspread.authorize(creds)
+    sheet = client.open(sheets_name).worksheet(sheet_name)
+    data = pd.DataFrame(sheet.get_all_records(), dtype=str)
+    return data
