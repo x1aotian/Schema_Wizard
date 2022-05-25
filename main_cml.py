@@ -70,7 +70,7 @@ for idx, type_option in enumerate(type_options_proto):
         cho = int(field_input)
     else:
         cho = 0
-    type_option_chosen = type_option[cho]
+    type_option_chosen = type_option[cho]  # return to me using html
 
     # modify attributes
     attr_keys = type_option_chosen.__dict__['mod_attrs']
