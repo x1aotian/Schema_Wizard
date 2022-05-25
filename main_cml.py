@@ -30,6 +30,10 @@ elif src_format == "ggs":
     print("\n> Please input path of creds json file, sheets name and sheet name, seperated by comma. ex: \"samples/creds_wizard.json, schema_sample, Read\".")
     creds_json_file, sheets_name, sheet_name = [i.strip() for i in str(input()).split(",")]
     src_data = src_read.read_ggs(creds_json_file, sheets_name, sheet_name)
+elif src_format == "sst":
+    print("\n> Please input api token and sheet name, seperated by comma. ex: \"hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn, Read\".")
+    api_token_sst, sheet_name_sst = [i.strip() for i in str(input()).split(",")]
+    src_data, src_type = src_read.read_sst(api_token_sst, sheet_name_sst)
 
 ## Step 2. regress
 
@@ -52,6 +56,14 @@ elif src_format == "sql":
         for type in map_src["sql"][ty]:
             type_m = type()
             if type_m.regress(src_data[nm]):
+                type_options_proto[-1].append(type_m)
+
+elif src_format == "sst":
+    for i in range(len(src_type.columns)):
+        type_options_proto.append([])
+        for type in map_src["sst"][src_type.iloc[0, i]]:
+            type_m = type()
+            if type_m.regress(src_data.iloc[:, i]):
                 type_options_proto[-1].append(type_m)
 
 
@@ -126,5 +138,10 @@ elif dest_format == "ggs":
     print("\n> Please input path of creds json file, sheets name and sheet name, seperated by comma. ex: \"samples/creds_wizard.json, schema_sample, Write\".")
     creds_json_file, sheets_name, sheet_name = [i.strip() for i in str(input()).split(",")]
     dest_write.write_ggs(creds_json_file, sheets_name, sheet_name, DSL_0)
+
+elif dest_format == "sst":
+    print("\n> Please input api token and sheet name, seperated by comma. ex: \"hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn, Write\".")
+    api_token_sst, sheet_name_sst = [i.strip() for i in str(input()).split(",")]
+    dest_write.write_sst(api_token_sst, sheet_name_sst, DSL_0)
 
 print("\n*** Convert schema from %s to %s successfully! ***" % (src_format, dest_format))

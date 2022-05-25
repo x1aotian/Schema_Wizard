@@ -85,9 +85,11 @@ class Number:
             else:
                 # self.__dest_type = "DOUBLE"
                 self.setDestType("DOUBLE")
-        elif dest_form == "csv":
+        elif dest_form in ["csv", "ggs"]:
             # self.__dest_type = "string"
             self.setDestType("string")
+        elif dest_form == "sst":
+            self.setDestType("TEXT_NUMBER")
 
     def getDestType(self):
         return self.__dest_type

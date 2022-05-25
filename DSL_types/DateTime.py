@@ -60,8 +60,10 @@ class Date:
         if dest_form == "sql":
             self.__dest_type = "DATE"
             # data = datetime.datetime.strptime(data, '%Y-%m-%d')
-        elif dest_form == "csv":
+        elif dest_form in ["csv", "ggs"]:
             self.__dest_type = "string"
+        elif dest_form == "sst":
+            self.__dest_type = "DATE"
         return
     
     def getDestType(self):

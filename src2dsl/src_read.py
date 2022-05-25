@@ -4,6 +4,8 @@ import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+from smartsheet import Smartsheet
+
 def read_csv(src_file):
     return pd.read_csv(src_file, dtype=str)
 
@@ -22,3 +24,19 @@ def read_ggs(creds_json_file, sheets_name, sheet_name):
     sheet = client.open(sheets_name).worksheet(sheet_name)
     data = pd.DataFrame(sheet.get_all_records(), dtype=str)
     return data
+
+def read_sst(api_token, sheet_name):
+    sst_client = Smartsheet(api_token)
+    sheet = sst_client.Sheets.get_sheet_by_name(sheet_name)
+    titles = [col.title for col in sheet.columns]
+    types = [col.type.value.name for col in sheet.columns]
+    rows = []
+    for row in sheet.rows:
+        cells = []
+        for cell in row.cells:
+            cells.append(cell.value)
+        rows.append(cells)
+
+    table = pd.DataFrame(rows, columns=titles, dtype=str)
+    types = pd.DataFrame([types], columns=titles, dtype=str)
+    return table, types

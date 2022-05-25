@@ -9,27 +9,32 @@ from DSL import DSL
 csv_file = "samples/csv_test.csv"
 
 # src_format = "sql"
-sql_file = "samples/sql_test_dest.db"
-sql_table = "Students"
+sql_file = "samples/sql_test.db"
+sql_table = "People"
 
-src_format = "ggs"
+# src_format = "ggs"
 creds_json_file = "samples/creds_wizard.json"
 sheets_name = "schema_sample"
-sheet_name = "Read"
+sheet_name_ggs = "Read"
+
+src_format = "sst"
+api_token_sst = "hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn"
+sheet_name_sst = "Read"
 
 if src_format == "csv":
     src_data = src_read.read_csv(csv_file)
 elif src_format == "sql":
     src_data, src_type = src_read.read_sql(sql_file, sql_table)
 elif src_format == "ggs":
-    src_data = src_read.read_ggs(creds_json_file, sheets_name, sheet_name)
-
+    src_data = src_read.read_ggs(creds_json_file, sheets_name, sheet_name_ggs)
+elif src_format == "sst":
+    src_data, src_type = src_read.read_sst(api_token_sst, sheet_name_sst)
 
 ## Step 2. regress
 
 type_options = []
 
-if src_format in ["csv", "ggs"]:
+if src_format == "csv":
     for col in src_data.columns:
         type_options.append([])
         for type in map_src["csv"]["string"]:
@@ -46,6 +51,14 @@ elif src_format == "sql":
         for type in map_src["sql"][ty]:
             type_m = type()
             if type_m.regress(src_data[nm]):
+                type_options[-1].append(type_m)
+
+elif src_format == "sst":
+    for i in range(len(src_type.columns)):
+        type_options.append([])
+        for type in map_src["sst"][src_type.iloc[0, i]]:
+            type_m = type()
+            if type_m.regress(src_data.iloc[:, i]):
                 type_options[-1].append(type_m)
 
 
@@ -72,8 +85,11 @@ csv_file = "samples/csv_test_dst.csv"
 sql_file = "samples/sql_test_dst.db"
 table_name = "Students"
 
-dest_format = "ggs"
-sheet_name = "Write"
+# dest_format = "ggs"
+sheet_name_ggs = "Write"
+
+dest_format = "sst"
+sheet_name_sst = "Write"
 
 for field in DSL_0.getFields():
     field.transform(dest_format)
@@ -83,6 +99,8 @@ if dest_format == "csv":
 elif dest_format == "sql":
     dest_write.write_sql(sql_file, table_name, DSL_0)
 elif dest_format == "ggs":
-    dest_write.write_ggs(creds_json_file, sheets_name, sheet_name, DSL_0)
+    dest_write.write_ggs(creds_json_file, sheets_name, sheet_name_ggs, DSL_0)
+elif dest_format == "sst":
+    dest_write.write_sst(api_token_sst, sheet_name_sst, DSL_0)
 
 print("end")

@@ -50,9 +50,11 @@ class String:
             # use varchar
             # self.__dest_type = "VARCHAR"
             self.setDestType("VARCHAR")
-        elif dest_form == "csv":
+        elif dest_form in ["csv", "ggs"]:
             #self.__dest_type = "string"
-            self.setDestType("csv")
+            self.setDestType("string")
+        elif dest_form == "sst":
+            self.setDestType("TEXT_NUMBER")
 
     def getDestType(self):
         return self.__dest_type
