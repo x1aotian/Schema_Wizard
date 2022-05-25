@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="./index.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Intelligent Data Wizard</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="title">Intelligent Data Wizard</h1>
+
+        <p id="description">Please start generating the data and the schema</p>
+
+        <div class="row">
+            <div class="col-md-8 form_field">
+
+                <form id="survey-form" method="POST">
+
+                    <div class="form-group">
+                        <p>What is your source data type</p>
+                        <select id="source" name="source" class="form-control" required="">
+                            <option value="">Select one below</option>
+                            <option value="CSV">CSV</option>
+                            <option value="SQL">SQL</option>
+                            <option value="Airtable">AirTable</option>
+                            <option value="GoogleSheet">Google Sheet</option>
+                        </select>
+                    </div>
+                    
+                    <div id="src-CSV" class="form-group src hidden">
+						<label id="csv-label" name="csv-label">Path of your source CSV File:</label>
+						<input type="file" name="csv_src_file" class="form-control" id="csv_src_file"
+                            required><br><br>
+					</div>
+          
+                    <div id="src-SQL" class="form-group src hidden">
+						<label id="sql-label" name="sql-label">Path of your source SQL:</label>
+						<input type="file" name="sql_src_file" class="form-control" id="sql_src_file"
+                            required>
+                        <label id="table-label" name="table-label">Name of the source SQL Table</label>
+                        <input type="text" name="sql_table_name_src" class="form-control" id="sql_table_name_src"
+                            required><br><br>
+					</div>
+
+                    <div id="src-Airtable" class="form-group src hidden">
+                        <label id="label-airtable" for="path">The link to your source AirTable </label>
+                        <input type="path" name="AirTablePath" class="form-control" id="AirTablePath"
+                            placeholder="Enter the path of your input file" required><br><br>
+                    </div>
+                    
+                    <div id="src-GoogleSheet" class="form-group src hidden">
+                        <label id="label-googlesheet" for="path">The link to your source Google Sheet</label>
+                        <input type="path" name="GoogleSheetPath" class="form-control" id="GoogleSheetPath"
+                            placeholder="Enter the path of your input file" required><br><br>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p>What is your destination data type</p>
+                        <select id="dest" name="dest" class="form-control" required="">
+                            <option value="">Select one below</option>
+                            <option value="CSV">CSV</option>
+                            <option value="SQL">SQL</option>
+                            <option value="Airtable">AirTable</option>
+                            <option value="GoogleSheet">Google Sheet</option>
+                        </select>
+                    </div>
+
+                    <div id="dest-CSV" class="form-group dest hidden">
+						<label id="csv-label" name="csv-label">Path of your dest CSV File:</label>
+                        <input type="path" name="csv_dest_file" class="form-control" id="csv_dest_file"
+                            placeholder="Enter the path you want to save your file" required><br><br>
+					</div>
+          
+                    <div id="dest-SQL" class="form-group dest hidden">
+						<label id="sql-label" name="sql-label">Path of your dest SQL:</label>
+                        <input type="path" name="sql_dest_file" class="form-control" id="sql_dest_file"
+                            placeholder="Enter the path you want to save your file" required><br><br>
+                        <label id="table-label" name="table-label">Name of the dest SQL Table</label>
+                        <input type="text" name="sql_table_name_dest" class="form-control" id="sql_table_name_dest"
+                            required><br><br>
+					</div>
+
+                    <div id="dest-Airtable" class="form-group dest hidden">
+                        <label id="label-airtable" for="path">The link to your dest AirTable </label>
+                        <input type="path" name="AirTablePath" class="form-control" id="AirTablePath"
+                            required><br><br>
+                    </div>
+                    
+                    <div id="dest-GoogleSheet" class="form-group dest hidden">
+                        <label id="label-googlesheet" for="path">The link to your dest Google Sheet</label>
+                        <input type="path" name="GoogleSheetPath" class="form-control" id="GoogleSheetPath"
+                            required><br><br>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" id="submit" class="submit">
+                            CONFIRM
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

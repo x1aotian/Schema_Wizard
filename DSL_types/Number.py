@@ -47,14 +47,12 @@ class Number:
         # TODO
         cur_prec = 0
         for di in data:
-            print(di)
             new_di, cur_prec = parse(di, cur_prec)
             if (new_di is None and cur_prec is None): return False
             # update the precision, min_val, and max_val
             if (new_di < self.minv): self.minv = new_di
             if (new_di > self.maxv): self.maxv = new_di
             if (cur_prec > self.prec): self.prec = cur_prec
-            print("pass")
         return True
 
     # process string to desired format

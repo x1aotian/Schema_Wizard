@@ -1,0 +1,10 @@
+$(document).ready(function(){
+    $("#source").change(function(){
+        $(".src").addClass("hidden");
+        $("#src-"+$(this).val()).removeClass("hidden");
+    });
+    $("#dest").change(function(){
+        $(".dest").addClass("hidden");
+        $("#dest-"+$(this).val()).removeClass("hidden");
+    });
+});

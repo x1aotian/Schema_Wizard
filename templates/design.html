@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Intelligent Data Wizard</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="title">Intelligent Data Wizard</h1>
+
+        <p id="description">Please start generating the data and the schema</p>
+
+        <div class="row">
+            <div class="col-md-8 form_field">
+
+                <form id="survey-form" method="POST">
+
+                    <div class="form-group">
+                        <p>What is your DSL type:</p>
+                        <select id="chooseType" name="chooseType" class="form-control" required="">
+                            
+                        </select>
+                    </div>
+                    
+                    <div id="content-Number" class="form-group content hidden">
+						<label id="number-prec-label" name="number-prec-label">Precision of the Number:</label>
+                        <input type="text" name="prec" class="form-control" id="prec" 
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="number-min-label" name="number-min-label">Minimum Value of the Number:</label>
+						<input type="text" name="minValue" class="form-control" id="minValue"
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="number-max-label" name="number-max-label">Maximum Value of the Number:</label>
+                        <input type="text" name="maxValue" class="form-control" id="maxValue"
+                               placeholder="Leave this blank empty to set default value" required><br><br>
+					</div>
+          
+                    <div id="content-Currency" class="form-group content hidden">
+                        <label id="curr-type-label" name="curr-type-label">Currency Type:</label>
+                        <select id="curr-type-choose" name="curr-type-choose" class="form-control" required="">
+                            <option value="USD">USD ($)</option>
+                            <option value="CNY">CNY (¥)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="EUR">EUR (€)</option>
+                        </select>
+                        <label id="curr-prec-label" name="curr-prec-label">Precision of the Currency Number:</label>
+                        <input type="text" name="prec" class="form-control" id="prec" 
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="curr-min-label" name="curr-min-label">Minimum Value of the Currency Number:</label>
+						<input type="text" name="minValue" class="form-control" id="minValue"
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="curr-max-label" name="curr-max-label">Maximum Value of the Currency Number:</label>
+                        <input type="text" name="maxValue" class="form-control" id="maxValue"
+                               placeholder="Leave this blank empty to set default value" required><br><br>
+					</div>
+
+                    <div id="content-String" class="form-group content hidden">
+                        <label id="string-min-label" name="string-min-label">Minimum Length of the String:</label>
+						<input type="text" name="minLength" class="form-control" id="minValue"
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="string-max-label" name="string-max-label">Maximum Length of the String:</label>
+                        <input type="text" name="maxLength" class="form-control" id="maxValue"
+                               placeholder="Leave this blank empty to set default value" required><br><br>
+                    </div>
+
+                    <div id="content-Email" class="form-group content hidden">
+                        <p>The minimum length and maximum length of an email string should not be specified!</p>
+                        <br><br>
+                    </div>
+
+                    <div id="content-Phone_Number" class="form-group content hidden">
+                        <p>The minimum length and maximum length of a phone number string should not be specified!</p>
+                        <br><br>
+                    </div>
+
+                    <div id="content-URL" class="form-group content hidden">
+                        <p>The minimum length and maximum length of an URL string should not be specified!</p>
+                        <br><br>
+                    </div>
+
+                    <div id="content-Date" class="form-group content hidden">
+						<label id="date-min-label" name="date-min-label">Hard set the year to be after:</label>
+						<input type="text" name="minYear" class="form-control" id="minYear"
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="date-max-label" name="date-max-label">Hard set the year to be before:</label>
+                        <input type="text" name="maxYear" class="form-control" id="maxYear"
+                               placeholder="Leave this blank empty to set default value" required><br><br>
+					</div>
+
+                    <div id="content-Time" class="form-group content hidden">
+                        <p>There is no attributes for Time (HH:MM:SS) to specify</p>
+                        <br><br>
+                    </div>
+
+                    <div id="content-DateTime" class="form-group content hidden">
+						<label id="datetime-min-label" name="datetime-min-label">Hard set the year to be after:</label>
+						<input type="text" name="minYear" class="form-control" id="minYear"
+                               placeholder="Leave this blank empty to set default value" required>
+                        <label id="datetime-max-label" name="datetime-max-label">Hard set the year to be before:</label>
+                        <input type="text" name="maxYear" class="form-control" id="maxYear"
+                               placeholder="Leave this blank empty to set default value" required><br><br>
+					</div>
+
+                    <div class="form-group">
+                        <button type="submit" id="submit" class="submit">
+                            CONFIRM
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script src="./design.js"></script>
+</body>
+
+</html>

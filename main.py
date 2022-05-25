@@ -48,7 +48,7 @@ elif src_format == "sql":
 type_options = [i[0] for i in type_options]
 
 DSL_0 = DSL(0)
-DSL_0.names = list(src_data.columns)
+DSL_0.setNames(list(src_data.columns))
 for type_option in type_options:
     DSL_0.addField(type_option)
 
@@ -65,7 +65,7 @@ dest_format = "csv"
 sql_file = "samples/sql_test_dst.db"
 table_name = "Students"
 
-for field in DSL_0.fields:
+for field in DSL_0.getFields():
     field.getDestType(dest_format)
 
 if dest_format == "csv":
