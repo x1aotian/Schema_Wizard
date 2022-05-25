@@ -126,30 +126,17 @@ textarea {
     border: 1px solid #FF6D00 !important;
 }
 
-input[type="path"] {
+input[type="email"] {
     outline: none;
     box-shadow: none !important;
     border: 1px solid #FF6D00 !important;
 }
 
-input[type="path"]:focus {
+input[type="email"]:focus {
     outline: none;
     box-shadow: none !important;
     border: 1px solid #EC4849 !important;
 }
-
-input[type="file"] {
-    outline: none;
-    box-shadow: none !important;
-    border: 1px solid #FF6D00 !important;
-}
-
-input[type="file"]:focus {
-    outline: none;
-    box-shadow: none !important;
-    border: 1px solid #EC4849 !important;
-}
-
 
 input[type="number"] {
     outline: none;

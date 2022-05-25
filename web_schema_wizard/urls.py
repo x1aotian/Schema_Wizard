@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path(r"^admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
     path('main/', views.main, name='main'),  # three params illustrated in: https://docs.djangoproject.com/en/4.0/intro/tutorial01/
     path('<int:id>/view2', views.view2 , name = 'view2'),
     path('original_view/', views.original_view, name = 'original_view'),

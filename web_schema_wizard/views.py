@@ -117,7 +117,6 @@ def choose_type(request):
         return render(request, 'design.html', context)
 
 def choose_type_mod_loop(request):
-    global DSL_0
     if request.method == 'POST':
         field_input = str(request.POST.get('chosen'))  # menu list should set values of different options as indexes (choose nothing leads to 'default' value) —— html can set value for different menu list option
         if field_input != "default":
@@ -156,10 +155,7 @@ def choose_type_mod_loop(request):
             return render(request, 'choose_type_mod.html', context)
         
         ## Step 4.2. DSL add records (and process) 
-<<<<<<< HEAD
-=======
         global src_data
->>>>>>> a38e608d4f086c53e50153d738c3cb9e78152d24
         for idx, row in src_data.iterrows():
             DSL_0.addRecord(row)
 
