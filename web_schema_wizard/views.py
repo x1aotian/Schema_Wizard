@@ -16,8 +16,8 @@ type_options_proto = []
 loop_num = 0
 # type_option_temp = None
 DSL_0 = None
-# src_data = None
-# src_format = ""
+src_data = None
+src_format = ""
 dest_format = ""
 # csv_dest_file = ""
 # sql_dest_file = ""
@@ -54,6 +54,7 @@ def original_view(request):  # use id when we have form like path('<int:question
 
 def choose_type(request):
     if request.method == 'POST':
+        global src_format
         src_format = str(request.POST.get('source'))
         global dest_format
         dest_format = str(request.POST.get('dest'))
@@ -135,6 +136,7 @@ def choose_type_mod_loop(request):
             attr_values_mod = eval(attr_input)
             for i, v in enumerate(attr_keys):
                 type_option_chosen.__dict__[v] = attr_values_mod[i]
+        global DSL_0
         DSL_0.addField(type_option[cho])
 
         # repeatedly call the html page
@@ -154,6 +156,10 @@ def choose_type_mod_loop(request):
             return render(request, 'choose_type_mod.html', context)
         
         ## Step 4.2. DSL add records (and process) 
+<<<<<<< HEAD
+=======
+        global src_data
+>>>>>>> a38e608d4f086c53e50153d738c3cb9e78152d24
         for idx, row in src_data.iterrows():
             DSL_0.addRecord(row)
 

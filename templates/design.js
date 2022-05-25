@@ -6,7 +6,7 @@ $(document).ready(function(){
 });
 var context = {
     'type_list': ["Numbers", "Currency", "String", "Email", "Phone_Number", "URL", "Date", "Time", "DateTime"],
-    'type_list_demands': [["prec", "minv", "maxv"], ["curr_type", "prec", "minv", "maxv"], ["minl","maxl"], ["minl","maxl"], ["minl","maxl"], ["minl", "maxl"], ["max_year", "min_year"], [], ["max_year", "min_year"]];
+    'type_list_demands': [["prec", "minv", "maxv"], ["curr_type", "prec", "minv", "maxv"], ["minl","maxl"], ["minl","maxl"], ["minl","maxl"], ["minl", "maxl"], ["max_year", "min_year"], [], ["max_year", "min_year"]]
 }
 /*
 var fieldType = {"Number": ["prec", "minv", "maxv"],
