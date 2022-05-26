@@ -34,5 +34,11 @@ map_src = \
                "Number": [Number, Currency],
                "Email": [Email],
                "Date/time": [Date, DateTime], # 【？？】no idea on the regex of Date/time type of nintex
-               "Yes/no": [String]}  # TODO: define a boolean type in DSL
+               "Yes/no": [String]},  # TODO: define a boolean type in DSL
+
+    # smartsheet doc: 
+    "sst": {"TEXT_NUMBER": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],
+            "DATE": [Date],
+            "PICKLIST": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],
+            "CHECKBOX": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String]}
 }

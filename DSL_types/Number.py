@@ -21,7 +21,7 @@ def parse(di, cur_prec, change_prec=False):
             if (cur_prec == 0): 
                 new_di = int(partition[0])
             else:
-                new_di = str(round(float(di), cur_prec))
+                new_di = round(float(di), cur_prec)
         else: 
             cur_prec = len(partition[2])
             new_di = float(di)
@@ -37,7 +37,7 @@ class Number:
         self.minv = min_val
         self.maxv = max_val
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["prec", "minv", "maxv"]
 
     # Do regression to fit given data
@@ -47,45 +47,55 @@ class Number:
         # TODO
         cur_prec = 0
         for di in data:
+            print(di)
             new_di, cur_prec = parse(di, cur_prec)
             if (new_di is None and cur_prec is None): return False
             # update the precision, min_val, and max_val
             if (new_di < self.minv): self.minv = new_di
             if (new_di > self.maxv): self.maxv = new_di
             if (cur_prec > self.prec): self.prec = cur_prec
+            print("pass")
         return True
 
     # process string to desired format
     # input: string s
     # output: number num, prec (neglected)
     def process(self, s):
-        num, _ = parse(s, self.prec, change_prec = True)
+        num, prec = parse(s, self.prec, change_prec = True)
+        if (num > self.maxv): num = self.maxv
+        if (num < self.minv): num = self.minv
+        
+        # modify the precision according to the self.prec
+        if (type(num) != int): 
+            if (prec == 0):
+                num = int(num)
+            else:
+                num = round(num, prec)
+        elif (type(num) == int):
+            if (prec != 0):
+                num = float(num)
         return num
     
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
             if self.prec == 0:
-                self.dest_type = "INT"
+                # self.__dest_type = "INT"
+                self.setDestType("INT")
             else:
-                self.dest_type = "DOUBLE"
-        elif dest_form == "csv":
-            self.dest_type = "string"
+                # self.__dest_type = "DOUBLE"
+                self.setDestType("DOUBLE")
+        elif dest_form in ["csv", "ggs"]:
+            # self.__dest_type = "string"
+            self.setDestType("string")
+        elif dest_form == "sst":
+            self.setDestType("TEXT_NUMBER")
 
-    def transform(self, data):
-        if self.dest_form == "sql":
-            if self.dest_type == "INT":
-                # convert the DSL into the int if it's not int
-                if (type(data) != int): DSL = int(data)
-            elif self.dest_type == "DOUBLE":  # use double 
-                if (type(data) == int):
-                    data_new = float(int)
-                else:
-                    data_new = round(data, self.prec)
-
-        elif self.dest_form == "csv":
-            data_new = str(data)
-        return data_new
+    def getDestType(self):
+        return self.__dest_type
+    
+    def setDestType(self, type):
+        self.__dest_type = type
 
 class Currency(Number):
     def __init__(self, curr_type='USD', curr_map = {'USD': '$', 'CNY': '¥', 'GBP': '£', 'EUR': '€'},precision=0, min_val=-100, max_val=100):
@@ -95,7 +105,7 @@ class Currency(Number):
         self.minv = min_val
         self.maxv = max_val
         self.dest_form = None
-        self.dest_type = ""
+        self.__dest_type = ""
         self.mod_attrs = ["curr_type", "prec", "minv", "maxv"]
 
     def regress(self, data):
@@ -109,7 +119,7 @@ class Currency(Number):
     
             if (di[0] in self.curr_map.values()):
                 di = di[1:]
-            s_new, next_prec = parse(di, cur_prec)
+            s_new, after_prec = parse(di, cur_prec)
             
             if (s_new is None): 
                 return False
@@ -117,48 +127,56 @@ class Currency(Number):
             
             if (s_new < self.minv): self.minv = s_new
             if (s_new > self.maxv): self.maxv = s_new
-            if (next_prec > self.prec): self.prec = next_prec
-            cur_prec = next_prec
+            if (after_prec > self.prec): self.prec = after_prec
+            cur_prec = after_prec
         return True
     
     def process(self, s):
-        curr_out = False
-
+        pre_sign = 1
+        # there will only be 3 patterns for currency: 1. "-100", 2. "$100", 3. "-$100"
+        # there will nothing like: 1. ""
+        # if there is a '-' (before the currency sign)
         if (s[0] == '-'): 
             s = s[1:]
-            curr_out = True
+            pre_sign = -1
+        # if there is a currency sign
         if (s[0] in self.curr_map.values()):
             s = s[1:]
-        num, _ = parse(s, self.prec, change_prec = True)
-        return -num if curr_out else num
+        num, prec = parse(s, self.prec, change_prec = True)
+        if (pre_sign * num > self.maxv): num = pre_sign * self.maxv
+        if (pre_sign * num < self.minv): num = pre_sign * self.minv
+
+        if num >= 0:
+            num_str = str(num)
+            after_sign = 1
+        else:
+            num_str = str(num)[1:]
+            after_sign = -1
+        num_str_list = num_str.split('.')
+        # modify the precision according to the self.prec
+        if (len(num_str_list) == 1): 
+            if (prec != 0):
+                num_str += "." + (prec * '0')
+        elif (len(num_str_list) == 2):
+            if (prec == 0):
+                num_str = num_str_list[0]
+            elif (prec < len(num_str_list[1])):
+                num_str = num_str_list[0] + "." + num_str_list[1][:prec]
+            elif (prec > len(num_str_list[1])):
+                num_str += ((prec - len(num_str_list[1])) * '0')
+
+        # add the curr sign
+        num_str = self.curr_map[self.curr_type] + num_str
+        # add the negative sign
+        if (pre_sign * after_sign == -1): num_str = "-" + num_str
+        return num_str
     
-    def getDestType(self, dest_form):
+    def transform(self, dest_form):
         self.dest_form = dest_form
         if dest_form == "sql":
-            if self.prec == 0:
-                self.dest_type = "INT"
-            else:
-                self.dest_type = "DOUBLE"  # use double 
-
+            # use varchar
+            # self.__dest_type = "VARCHAR"
+            self.setDestType("VARCHAR")
         elif dest_form == "csv":
-            self.dest_type = "string"
-
-
-    def transform(self, data):
-        if self.dest_form == "sql":
-            if self.dest_type == "INT":
-                # convert the DSL into the int if it's not int
-                if (type(data) != int): data_new = int(data)
-            else:
-                self.dest_type = "DOUBLE"  # use double 
-                if (type(data) == int):
-                    data_new = float(int)
-                else:
-                    data_new = round(data, self.prec)
-
-        elif self.dest_form == "csv":
-            self.dest_type = "string"
-            data_new = self.curr_map[self.curr_type] + str(data)
-
-        return data_new
-            
+            # self.__dest_type = "string"
+            self.setDestType("string")
