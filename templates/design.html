@@ -27,7 +27,6 @@
 
                 <form id="survey-form" method="POST" action="{% url 'choose_type_mod_loop' %}">
                     <input type="hidden" id="type_list" name="type_list" value="{{ type_list }}">
-
                     <div class="form-group">
                         <p>What is your DSL type:</p>
                         <select id="chooseType" name="chooseType" class="form-control" required="">
@@ -35,7 +34,7 @@
                         </select>
                     </div>
                     
-                    <div id="content-Numbers" class="form-group content hidden">
+                    <div id="content-Number" class="form-group content hidden">
 						<label id="number-prec-label" name="number-prec-label">Precision of the Number:</label>
                         <input type="text" name="prec" class="form-control" id="prec" 
                                placeholder="Leave this blank empty to set default value">
