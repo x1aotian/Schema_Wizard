@@ -28,7 +28,7 @@
                 <form id="survey-form" method="POST" action="{% url 'choose_type_mod_loop' %}">
                     <input type="hidden" id="type_list" name="type_list" value="{{ type_list }}">
                     <div class="form-group">
-                        <p>What is your DSL type:</p>
+                        <p>What is your DSL type for Column {{column_name}}:</p>
                         <select id="chooseType" name="chooseType" class="form-control" required="">
                             
                         </select>
