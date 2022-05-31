@@ -94,7 +94,6 @@ class Time(Date):
                 except ValueError:
                     pass
             if (date is None): return False
-            print(date)
         return True
     
     def process(self, s):

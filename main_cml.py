@@ -14,7 +14,7 @@ from DSL import DSL
 
 print("------------ Welcome to Schema Wizard CLI Demo ------------")
 
-print("\n> Please input source format. Current valid inputs: csv, sql, ggs.")
+print("\n> Please input source format. Current valid inputs: csv, sql, ggs, sst.")
 src_format = str(input())
 
 
@@ -118,7 +118,7 @@ for idx, row in src_data.iterrows():
 # sql_file = "samples/sql_test_dst.db"
 # table_name = "Students"
 
-print("\n> Please input destination format. Current valid inputs: csv, sql.")
+print("\n> Please input destination format. Current valid inputs: csv, sql, ggs, sst.")
 dest_format = str(input())
 
 for field in DSL_0.getFields():
