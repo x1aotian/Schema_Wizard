@@ -144,9 +144,12 @@ class Currency(Number):
         if (pre_sign * num > self.maxv): num = pre_sign * self.maxv
         if (pre_sign * num < self.minv): num = pre_sign * self.minv
 
-        if num >= 0:
+        if num > 0:
             num_str = str(num)
             after_sign = 1
+        elif num == 0:
+            num_str = str(num)
+            after_sign = 0
         else:
             num_str = str(num)[1:]
             after_sign = -1
