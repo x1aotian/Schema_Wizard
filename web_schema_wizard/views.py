@@ -35,6 +35,13 @@ sql_table_name_dest = ""
 type_option_name = []
 column_name = []
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def form(request):
     return render(request, 'index.html')
 
@@ -63,7 +70,8 @@ def choose_type(request):
         global src_type
         global csv_file
         global sql_file  # just for debugging
-        src_format.lower()
+        src_format = src_format.lower()
+        # src_format may be used inside DSL, so use lower case for consistency
         if src_format == "csv":
             # print("\n> Please input source file's path. ex: \"samples/csv_test.csv\".")
             csv_file = str(request.POST.get('csv_src_file')).strip() 
@@ -101,10 +109,12 @@ def choose_type(request):
         
         global DSL_0
         DSL_0 = DSL(0)
-        DSL_0.names = list(src_data.columns)
+        # 【！！】xiaotian changed the member var name from names to __names, which leads to bug
+        # DSL_0.names = list(src_data.columns)
+        DSL_0.setNames(list(src_data.columns))
 
         # dest_path should be designated here, because 'request' would change when using other html
-        dest_format.lower()
+        dest_format = dest_format.lower()
         if dest_format == "csv":
             # print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
             global csv_dest_file
@@ -175,10 +185,14 @@ def choose_type_mod_loop(request):
             demand_input = request.POST.get(str(demand))
             # demand_input == "" means use default type and attributes (demands) OR choose the type whose attributes can't be modified OR just input nothing in some attributes
             if demand_input != "":
-                # eval can transfer string '1.5' to float 1.5, function name to function, etc
+                # eval can't transfer string ['1.5','hey'] to float 1.5 and string hey
+                # Another downside of eval is that it will transfer 'USD' to a var named 'USD'
+                # solution: use "['USD']" rather than 'USD'
                 # 【？？】should not allow users to input float to attributes?
-                # demand_input_eval = eval(demand_input)  # don't work for 'USD'
-                if demand_input.isdigit():
+                # demand_input = "['" + demand_input + "']"
+                # demand_input_eval = eval(demand_input)  # don't work for 'USD'【？？】
+                # isdigit dont work for -5
+                if is_number(demand_input):
                     demand_input_eval = int(demand_input)
                 else:
                     demand_input_eval = demand_input
@@ -218,6 +232,15 @@ def choose_type_mod_loop(request):
             DSL_0.addRecord(row)
 
         global dest_format
+        global csv_dest_file
+        global sql_dest_file
+        global sql_table_name_dest
+        global src_format
+
+        # 【！！】neglect this at first
+        for field in DSL_0.getFields():
+            field.transform(dest_format)
+
         if dest_format == "csv":
             # print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
             # csv_dest_file = str(request.POST.get('csv_dest_file'))
