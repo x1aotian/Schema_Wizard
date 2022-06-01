@@ -39,8 +39,8 @@
                             <option value="">Select one below</option>
                             <option value="CSV">CSV</option>
                             <option value="SQL">SQL</option>
-                            <option value="Airtable">AirTable</option>
                             <option value="GoogleSheet">Google Sheet</option>
+                            <option value="SmartSheet">Smart Sheet</option>
                         </select>
                     </div>
                     
@@ -54,21 +54,30 @@
                         <label id="sql-label" name="sql-label">Path of your source SQL:</label>
                         <input type="text" name="sql_src_file" class="form-control" id="sql_src_file"
                             >
-                        <label id="table-label" name="table-label">Name of the source SQL Table</label>
+                        <label id="table-label" name="table-label">Name of the source SQL Table:</label>
                         <input type="text" name="sql_table_name_src" class="form-control" id="sql_table_name_src"
                             ><br><br>
                     </div>
-
-                    <div id="src-Airtable" class="form-group src hidden">
-                        <label id="label-airtable" for="path">The link to your source AirTable </label>
-                        <input type="path" name="AirTablePath" class="form-control" id="AirTablePath"
-                            placeholder="Enter the path of your input file" ><br><br>
-                    </div>
                     
                     <div id="src-GoogleSheet" class="form-group src hidden">
-                        <label id="label-googlesheet" for="path">The link to your source Google Sheet</label>
-                        <input type="path" name="GoogleSheetPath" class="form-control" id="GoogleSheetPath"
-                            placeholder="Enter the path of your input file" ><br><br>
+                        <label id="ggs-label" name="ggs-label">Path of your Google Sheet credentials json file:</label>
+                        <input type="text" name="ggs_src_file" class="form-control" id="ggs_src_file"
+                            >
+                        <label id="sheets-label" name="sheets-label">Name of the sheets:</label>
+                        <input type="text" name="ggs_src_sheets_name" class="form-control" id="ggs_src_sheets_name"
+                            >
+                        <label id="table-label" name="table-label">Name of the sheet:</label>
+                        <input type="text" name="ggs_src_sheet_name" class="form-control" id="ggs_src_sheet_name"
+                            ><br><br>   
+                    </div>
+
+                    <div id="src-SmartSheet" class="form-group src hidden">
+                        <label id="sst-label" name="sst-label">The API token of your source Smart Sheet:</label>
+                        <input type="text" name="sst_src_token" class="form-control" id="sst_src_token"
+                            >
+                        <label id="sheet-label" name="sheet-label">The Sheet Name:</label>
+                        <input type="text" name="sst_src_sheet_name" class="form-control" id="sst_src_sheet_name"
+                            ><br><br>
                     </div>
                     
                     <div class="form-group">
@@ -77,8 +86,8 @@
                             <option value="">Select one below</option>
                             <option value="CSV">CSV</option>
                             <option value="SQL">SQL</option>
-                            <option value="Airtable">AirTable</option>
                             <option value="GoogleSheet">Google Sheet</option>
+                            <option value="SmartSheet">Smart Sheet</option>
                         </select>
                     </div>
 
@@ -92,21 +101,30 @@
                         <label id="sql-label" name="sql-label">Path of your dest SQL:</label>
                         <input type="text" name="sql_dest_file" class="form-control" id="sql_dest_file"
                             >
-                        <label id="table-label" name="table-label">Name of the dest SQL Table</label>
+                        <label id="table-label" name="table-label">Name of the dest SQL Table:</label>
                         <input type="text" name="sql_table_name_dest" class="form-control" id="sql_table_name_dest"
                             ><br><br>
                     </div>
-
-                    <div id="dest-Airtable" class="form-group dest hidden">
-                        <label id="label-airtable" for="path">The link to your dest AirTable </label>
-                        <input type="path" name="AirTablePath" class="form-control" id="AirTablePath"
-                            placeholder="Enter the path of your input file" ><br><br>
-                    </div>
                     
                     <div id="dest-GoogleSheet" class="form-group dest hidden">
-                        <label id="label-googlesheet" for="path">The link to your dest Google Sheet</label>
-                        <input type="path" name="GoogleSheetPath" class="form-control" id="GoogleSheetPath"
-                            placeholder="Enter the path of your input file" ><br><br>
+                        <label id="ggs-label" name="ggs-label">Path of your Google Sheet credentials json file:</label>
+                        <input type="text" name="ggs_dest_file" class="form-control" id="ggs_src_file"
+                            >
+                        <label id="sheets-label" name="sheets-label">Name of the sheets:</label>
+                        <input type="text" name="ggs_dest_sheets_name" class="form-control" id="ggs_dest_sheets_name"
+                            >
+                        <label id="table-label" name="table-label">Name of the sheet:</label>
+                        <input type="text" name="ggs_dest_sheet_name" class="form-control" id="ggs_dest_sheet_name"
+                            ><br><br>
+                    </div>
+
+                    <div id="src-SmartSheet" class="form-group src hidden">
+                        <label id="sst-label" name="sst-label">The API token of your dest Smart Sheet:</label>
+                        <input type="text" name="sst_dest_token" class="form-control" id="sst_dest_token"
+                            >
+                        <label id="sheet-label" name="sheet-label">The Sheet Name:</label>
+                        <input type="text" name="sst_dest_sheet_name" class="form-control" id="sst_dest_sheet_name"
+                            ><br><br>
                     </div>
 
                     <div class="form-group">

@@ -24,8 +24,8 @@
 
         <div class="row">
             <div class="col-md-8 form_field">
-                {% csrf_token %}
                 <form id="survey-form" method="POST" action="{% url 'choose_type_mod_loop' %}">
+                    {% csrf_token %}
                     <input type="hidden" id="type_list" name="type_list" value="{{ type_list }}">
                     <div class="form-group">
                         <p>What is your DSL type for Column {{column_name}}:</p>
