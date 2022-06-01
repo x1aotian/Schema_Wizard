@@ -41,6 +41,7 @@
                             <option value="SQL">SQL</option>
                             <option value="GoogleSheet">Google Sheet</option>
                             <option value="SmartSheet">Smart Sheet</option>
+                            <option value="PDF">Image / PDF</option>
                         </select>
                     </div>
                     
@@ -77,6 +78,12 @@
                             >
                         <label id="sheet-label" name="sheet-label">The Sheet Name:</label>
                         <input type="text" name="sst_src_sheet_name" class="form-control" id="sst_src_sheet_name"
+                            ><br><br>
+                    </div>
+
+                    <div id="src-PDF" class="form-group src hidden">
+                        <label id="pdf-label" name="pdf-label">The Path of your Image/PDF file:</label>
+                        <input type="text" name="pdf_src_path" class="form-control" id="pdf_src_path"
                             ><br><br>
                     </div>
                     
@@ -118,7 +125,7 @@
                             ><br><br>
                     </div>
 
-                    <div id="src-SmartSheet" class="form-group src hidden">
+                    <div id="dest-SmartSheet" class="form-group dest hidden">
                         <label id="sst-label" name="sst-label">The API token of your dest Smart Sheet:</label>
                         <input type="text" name="sst_dest_token" class="form-control" id="sst_dest_token"
                             >
