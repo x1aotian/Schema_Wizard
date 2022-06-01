@@ -42,6 +42,13 @@ def is_number(s):
     except ValueError:
         return False
 
+def is_int(s):
+    dot = "."
+    if dot in s:
+        return False
+    else:
+        return True
+
 def form(request):
     return render(request, 'index.html')
 
@@ -193,7 +200,10 @@ def choose_type_mod_loop(request):
                 # demand_input_eval = eval(demand_input)  # don't work for 'USD'【？？】
                 # isdigit dont work for -5
                 if is_number(demand_input):
-                    demand_input_eval = int(demand_input)
+                    if is_int(demand_input):
+                        demand_input_eval = int(demand_input)
+                    else:
+                        demand_input_eval = float(demand_input)
                 else:
                     demand_input_eval = demand_input
                 type_option_chosen.__dict__[demand] = demand_input_eval
