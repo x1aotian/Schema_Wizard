@@ -10,7 +10,8 @@ CREATE TABLE People (
     amount float,
     bday varchar(10),
     email varchar(40),
-    phone varchar(20)    
+    phone varchar(20),
+    homepage varchar(10)
 );
 .mode csv
 .import csv_test.csv People

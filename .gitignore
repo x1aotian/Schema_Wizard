@@ -128,4 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+<<<<<<< HEAD
 env_*
+=======
+.DS_Store
+
+env_wizard/
+>>>>>>> b45ff8c58053f91a3994a7c66b7000c283e0678e
