@@ -38,7 +38,7 @@ map_src = \
 
     # smartsheet doc: 
     "sst": {"TEXT_NUMBER": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],
-            "DATE": [Date],
+            "DATE": [Date, String],
             "PICKLIST": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String],
             "CHECKBOX": [Number, Currency, Date, Time, DateTime, Email, Phone_Number, URL, String]}
 }

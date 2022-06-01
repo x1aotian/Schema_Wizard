@@ -6,6 +6,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 from smartsheet import Smartsheet
 
+# from tesserocr import PyTessBaseAPI
+
 def read_csv(src_file):
     return pd.read_csv(src_file, dtype=str)
 
@@ -40,3 +42,8 @@ def read_sst(api_token, sheet_name):
     table = pd.DataFrame(rows, columns=titles, dtype=str)
     types = pd.DataFrame([types], columns=titles, dtype=str)
     return table, types
+
+# def read_pdf(pdf_file):
+#     with PyTessBaseAPI() as api:
+#         api.SetImageFile(pdf_file)
+#         api.GetUTF8Text()
