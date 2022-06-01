@@ -1,0 +1,365 @@
+/* body {
+    background-color: #dedbdb;
+    font-family: roboto;
+}
+
+.form_field {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#title {
+    text-align: center;
+    color: #FF6D00;
+    font-size: 40px;
+    font-weight: 400;
+    font-family: roboto;
+    margin-top: 2%;
+
+}
+
+#description {
+    text-align: center;
+
+
+    font-family: roboto;
+    font-size: 20px;
+    font-weight: 400;
+    color: #FF6D00;
+
+}
+
+.form-check-label {
+    margin-left: 20px;
+}
+
+.input-textarea {
+    min-height: 150px;
+    width: 100%;
+    padding: 0.5rem;
+
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: #37AF65;
+    color: inherit;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button {
+    border: none;
+}
+
+.hidden{
+    display:none;
+}
+
+form {
+    background-color: #FF6D00;
+    padding: 50px;
+    color: #FFFFFF;
+    border: 1px solid #FF6D00 !important;
+    box-shadow: 0 2px 4px 0 #FF6D00, 0 3px 10px 0 #FF6D00;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-green);
+    color: inherit;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+
+.submit {
+    width: 100%;
+    padding: 0.75rem;
+    border: 0.07em solid #FF6D00;
+    background-color: #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    color: #FF6D00;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.submit:hover {
+    color: #EC4849;
+    border-color: #EC4849;
+}
+
+.submit:active {
+    color: #FF6D00;
+    border-color: rgb(60, 64, 70);
+}
+
+@media all and (max-width:20em) {
+    .submit {
+        display: block;
+        margin: 0.4em auto;
+
+    }
+}
+
+input[type="text"],
+textarea:focus {
+
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+input[type="text"],
+textarea {
+
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #FF6D00 !important;
+}
+
+input[type="path"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #FF6D00 !important;
+}
+
+input[type="path"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+input[type="file"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #FF6D00 !important;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+
+input[type="number"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #FF6D00 !important;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+#dropdown {
+    outline: none;
+    box-shadow: none !important;
+
+    border: 1px solid #FF6D00 !important;
+}
+
+#dropdown:focus {
+    outline: none;
+    box-shadow: none !important;
+
+    border: 1px solid #FF6D00 !important;
+}
+ */
+
+
+ body {
+    background-color: #e8e3d3;
+    font-family: roboto;
+}
+
+.form_field {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#title {
+    text-align: center;
+    color: #4b2e83;
+    font-size: 40px;
+    font-weight: 400;
+    font-family: roboto;
+    margin-top: 2%;
+
+}
+
+#logo{
+	top:0; 
+	left:0; 
+}
+
+#description {
+    text-align: center;
+
+
+    font-family: roboto;
+    font-size: 20px;
+    font-weight: 400;
+    color: #4b2e83;
+
+}
+
+.form-check-label {
+    margin-left: 20px;
+}
+
+.input-textarea {
+    min-height: 150px;
+    width: 100%;
+    padding: 0.5rem;
+
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: #37AF65;
+    color: inherit;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+button {
+    border: none;
+}
+
+.hidden{
+    display:none;
+}
+
+form {
+    background-color: #4b2e83;
+    padding: 50px;
+    color: #FFFFFF;
+    border: 1px solid #4b2e83 !important;
+    box-shadow: 0 2px 4px 0 #4b2e83, 0 3px 10px 0 #4b2e83;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-green);
+    color: inherit;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+
+.submit {
+    width: 100%;
+    padding: 0.75rem;
+    border: 0.07em solid #4b2e83;
+    background-color: #FFFFFF;
+    margin: 0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 600;
+    color: #4b2e83;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.submit:hover {
+    color: #EC4849;
+    border-color: #EC4849;
+}
+
+.submit:active {
+    color: #4b2e83;
+    border-color: rgb(60, 64, 70);
+}
+
+@media all and (max-width:20em) {
+    .submit {
+        display: block;
+        margin: 0.4em auto;
+
+    }
+}
+
+input[type="text"],
+textarea:focus {
+
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+input[type="text"],
+textarea {
+
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #4b2e83 !important;
+}
+
+input[type="path"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #4b2e83 !important;
+}
+
+input[type="path"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+input[type="file"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #4b2e83 !important;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+
+input[type="number"] {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #4b2e83 !important;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    box-shadow: none !important;
+    border: 1px solid #EC4849 !important;
+}
+
+#dropdown {
+    outline: none;
+    box-shadow: none !important;
+
+    border: 1px solid #4b2e83 !important;
+}
+
+#dropdown:focus {
+    outline: none;
+    box-shadow: none !important;
+
+    border: 1px solid #4b2e83 !important;
+}
+

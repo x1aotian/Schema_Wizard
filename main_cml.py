@@ -85,7 +85,7 @@ for idx, type_option in enumerate(type_options_proto):
         cho = int(field_input)
     else:
         cho = 0
-    type_option_chosen = type_option[cho]
+    type_option_chosen = type_option[cho]  # return to me using html
 
     # modify attributes
     attr_keys = type_option_chosen.__dict__['mod_attrs']
@@ -143,5 +143,4 @@ elif dest_format == "sst":
     print("\n> Please input api token and sheet name, seperated by comma. ex: \"hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn, Write\".")
     api_token_sst, sheet_name_sst = [i.strip() for i in str(input()).split(",")]
     dest_write.write_sst(api_token_sst, sheet_name_sst, DSL_0)
-
 print("\n*** Convert schema from %s to %s successfully! ***" % (src_format, dest_format))
