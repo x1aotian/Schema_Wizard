@@ -1,4 +1,6 @@
+from glob import glob
 from urllib import request
+from attr import attr
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
@@ -30,6 +32,8 @@ sql_file = ""
 csv_dest_file = ""
 sql_dest_file = ""
 sql_table_name_dest = ""
+type_option_name = []
+column_name = []
 
 def form(request):
     return render(request, 'index.html')
@@ -59,12 +63,13 @@ def choose_type(request):
         global src_type
         global csv_file
         global sql_file  # just for debugging
-        if src_format == "CSV":
+        src_format.lower()
+        if src_format == "csv":
             # print("\n> Please input source file's path. ex: \"samples/csv_test.csv\".")
             csv_file = str(request.POST.get('csv_src_file')).strip() 
             # csv_file = request.POST.get('csv_src_file') 
             src_data = src_read.read_csv(csv_file)
-        elif src_format == "SQL":
+        elif src_format == "sql":
             # print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test.db, People\".")
             # sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
             sql_file = str(request.POST.get('sql_src_file')).strip()
@@ -73,14 +78,17 @@ def choose_type(request):
 
         # do regress
         global type_options_proto
-        if src_format == "CSV":
+        global column_name
+        if src_format == "csv":
             for col in src_data.columns:
+                # store column name in a list and pass it to html later
+                column_name.append(col)
                 type_options_proto.append([])
                 for type in map_src["csv"]["string"]:
                     type_m = type()
                     if type_m.regress(src_data[col]):
                         type_options_proto[-1].append(type_m)
-        elif src_format == "SQL":
+        elif src_format == "sql":
             for i in range(len(src_type)):
                 type_options_proto.append([])
                 nm = src_type.loc[i, 'name']
@@ -96,12 +104,13 @@ def choose_type(request):
         DSL_0.names = list(src_data.columns)
 
         # dest_path should be designated here, because 'request' would change when using other html
-        if dest_format == "CSV":
+        dest_format.lower()
+        if dest_format == "csv":
             # print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
             global csv_dest_file
             csv_dest_file = str(request.POST.get('csv_dest_file'))
             # dest_write.write_csv(csv_dest_file, DSL_0)
-        elif dest_format == "SQL":
+        elif dest_format == "sql":
             # print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, Students\".")
             # sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
             global sql_dest_file
@@ -114,7 +123,12 @@ def choose_type(request):
         # return render(request, 'choose_type.html', context)
         
         global type_option
+        # 【！！】index should be 0
         type_option = type_options_proto[0]
+        global type_option_name
+        for type in type_option:
+            typeName = type.__class__.__name__
+            type_option_name.append(typeName)
         # type_option_temp = type_option
         # not passing the class objects into html, but passing dict containing strings
         # pass all the possible types and their demands into it
@@ -126,37 +140,65 @@ def choose_type(request):
             type_list.append(typeName)
             type_list_demands.append(attr_keys)
         context = {'type_list': type_list,
-                   'type_list_demands': type_list_demands}
+                   'type_list_demands': type_list_demands,
+                   'column_name': column_name[0]}
         global loop_num
         loop_num = 0
         return render(request, 'design.html', context)
 
 def choose_type_mod_loop(request):
+    global type_option_name
     if request.method == 'POST':
-        field_input = str(request.POST.get('chosen'))  # menu list should set values of different options as indexes (choose nothing leads to 'default' value) —— html can set value for different menu list option
+        field_input = str(request.POST.get('chooseType'))  # 【！！】menu list should set values of different options as indexes (choose nothing leads to 'default' value) —— html can set value for different menu list option
         if field_input != "default":
-            cho = int(field_input)
+            index = type_option_name.index(field_input)
+            cho = index
         else:
             cho = 0
         global type_option
         type_option_chosen = type_option[cho]
 
         # modify attributes
-        attr_keys = type_option_chosen.__dict__['mod_attrs']  # attr_keys are "maxLen", "minLen"
-        attr_values = [type_option_chosen.__dict__[i] for i in attr_keys]  # attr_values are 10, 0, etc
-        attr_n = len(attr_keys)
-        attr_input = str(request.POST.get('modify'))  # 【！！】
-        if attr_input:
-            attr_values_mod = eval(attr_input)
-            for i, v in enumerate(attr_keys):
-                type_option_chosen.__dict__[v] = attr_values_mod[i]
+        # attr_keys = type_option_chosen.__dict__['mod_attrs']  # attr_keys are "maxLen", "minLen"
+        # attr_values = [type_option_chosen.__dict__[i] for i in attr_keys]  # attr_values are 10, 0, etc
+        # attr_n = len(attr_keys)
+        # attr_input = str(request.POST.get('modify'))  # 【！！】
+        # if attr_input:
+        #     attr_values_mod = eval(attr_input)
+        #     for i, v in enumerate(attr_keys):
+        #         type_option_chosen.__dict__[v] = attr_values_mod[i]
+        # global DSL_0
+        # DSL_0.addField(type_option[cho])
+
+        attr_keys = type_option_chosen.__dict__['mod_attrs']
+        for i, demand in enumerate(attr_keys):
+            demand_input = request.POST.get(str(demand))
+            # demand_input == "" means use default type and attributes (demands) OR choose the type whose attributes can't be modified OR just input nothing in some attributes
+            if demand_input != "":
+                # eval can transfer string '1.5' to float 1.5, function name to function, etc
+                # 【？？】should not allow users to input float to attributes?
+                # demand_input_eval = eval(demand_input)  # don't work for 'USD'
+                if demand_input.isdigit():
+                    demand_input_eval = int(demand_input)
+                else:
+                    demand_input_eval = demand_input
+                type_option_chosen.__dict__[demand] = demand_input_eval
         global DSL_0
         DSL_0.addField(type_option[cho])
 
+
         # repeatedly call the html page
         global loop_num
+        global column_name
         if loop_num < len(type_options_proto) - 1:
+            total_len = len(type_options_proto)
             type_option = type_options_proto[loop_num+1]
+            # renew type_option_name
+            type_option_name = []
+            for type in type_option:
+                typeName = type.__class__.__name__
+                type_option_name.append(typeName)
+            # generate dict for html page
             type_list = []
             type_list_demands = []
             for type in type_option:
@@ -165,20 +207,22 @@ def choose_type_mod_loop(request):
                 type_list.append(typeName)
                 type_list_demands.append(attr_keys)
             context = {'type_list': type_list,
-                    'type_list_demands': type_list_demands}
+                       'type_list_demands': type_list_demands,
+                       'column_name': column_name[loop_num+1]}
             loop_num += 1
-            return render(request, 'choose_type_mod.html', context)
+            return render(request, 'design.html', context)
         
         ## Step 4.2. DSL add records (and process) 
         global src_data
         for idx, row in src_data.iterrows():
             DSL_0.addRecord(row)
 
-        if dest_format == "CSV":
+        global dest_format
+        if dest_format == "csv":
             # print("\n> Please input dest file's path. ex: \"samples/csv_test_dest.csv\".")
             # csv_dest_file = str(request.POST.get('csv_dest_file'))
             dest_write.write_csv(csv_dest_file, DSL_0)
-        elif dest_format == "SQL":
+        elif dest_format == "sql":
             # print("\n> Please input source .db's path & table's name, seperated by comma. ex: \"samples/sql_test_dest.db, Students\".")
             # sql_file, sql_table = [i.strip() for i in str(input()).split(",")]
             # sql_dest_file = str(request.POST.get('sql_dest_file'))
