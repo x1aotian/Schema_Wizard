@@ -17,9 +17,12 @@ creds_json_file = "samples/creds_wizard.json"
 sheets_name = "schema_sample"
 sheet_name_ggs = "Read"
 
-src_format = "sst"
+# src_format = "sst"
 api_token_sst = "hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn"
 sheet_name_sst = "Read"
+
+src_format = "pdf"
+pdf_file = "samples/pdf_test.jpg"
 
 if src_format == "csv":
     src_data = src_read.read_csv(csv_file)
@@ -29,12 +32,14 @@ elif src_format == "ggs":
     src_data = src_read.read_ggs(creds_json_file, sheets_name, sheet_name_ggs)
 elif src_format == "sst":
     src_data, src_type = src_read.read_sst(api_token_sst, sheet_name_sst)
+elif src_format == "pdf":
+    src_data = src_read.read_pdf(pdf_file)
 
 ## Step 2. regress
 
 type_options = []
 
-if src_format == "csv":
+if src_format in ["csv", "ggs", "csv"]:
     for col in src_data.columns:
         type_options.append([])
         for type in map_src["csv"]["string"]:

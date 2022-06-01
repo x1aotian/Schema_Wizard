@@ -6,6 +6,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 from smartsheet import Smartsheet
 
+import pytesseract
+from PIL import Image
+import re
+
 # from tesserocr import PyTessBaseAPI
 
 def read_csv(src_file):
@@ -43,7 +47,9 @@ def read_sst(api_token, sheet_name):
     types = pd.DataFrame([types], columns=titles, dtype=str)
     return table, types
 
-# def read_pdf(pdf_file):
-#     with PyTessBaseAPI() as api:
-#         api.SetImageFile(pdf_file)
-#         api.GetUTF8Text()
+def read_pdf(pdf_file):
+    s = pytesseract.image_to_string(pdf_file, config='-c preserve_interword_spaces=1x1 --psm 1 --oem 3').strip()
+    s_list = s.split('\n')
+    data_list = [re.split(r" {2,}", i) for i in s_list]
+    table = pd.DataFrame(data_list[1:], columns=data_list[0], dtype=str)
+    return table

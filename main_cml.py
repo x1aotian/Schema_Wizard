@@ -14,7 +14,7 @@ from DSL import DSL
 
 print("------------ Welcome to Schema Wizard CLI Demo ------------")
 
-print("\n> Please input source format. Current valid inputs: csv, sql, ggs, sst.")
+print("\n> Please input source format. Current valid inputs: csv, sql, ggs, sst, pdf.")
 src_format = str(input())
 
 
@@ -34,12 +34,16 @@ elif src_format == "sst":
     print("\n> Please input api token and sheet name, seperated by comma. ex: \"hGxVYnqxHE3K4OpZufvauB4eUbLGLmH1IpNkn, Read\".")
     api_token_sst, sheet_name_sst = [i.strip() for i in str(input()).split(",")]
     src_data, src_type = src_read.read_sst(api_token_sst, sheet_name_sst)
+elif src_format == "pdf":
+    print("\n> Please input path of image of pdf. ex: \"samples/pdf_test.jpg\".")
+    pdf_file = str(input())
+    src_data = src_read.read_pdf(pdf_file)
 
 ## Step 2. regress
 
 type_options_proto = []
 
-if src_format in ["csv", "ggs"]:
+if src_format in ["csv", "ggs", "pdf"]:
     for col in src_data.columns:
         type_options_proto.append([])
         for type in map_src["csv"]["string"]:
