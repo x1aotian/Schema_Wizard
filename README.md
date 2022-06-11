@@ -10,7 +10,7 @@ Project Duration: Feb 2022 - Jun 2022.
 
 The Architecture of our code can be shown in:
 
-|     <img src="images/architecture.png" width="1000">      |
+|     <img src="images/Architecture.png" width="1000">      |
 |  :-----------------------------------------------------:  |
 |                      Architecture                         |
 
